@@ -1,0 +1,119 @@
+package com.naver.nid.cover;
+
+import com.naver.nid.cover.checker.NewCoverageChecker;
+import com.naver.nid.cover.checker.model.NewCoverageCheckReport;
+import com.naver.nid.cover.checker.model.NewCoveredFile;
+import com.naver.nid.cover.github.GithubPullRequestManager;
+import com.naver.nid.cover.parser.coverage.CoverageReportParser;
+import com.naver.nid.cover.parser.coverage.model.CoverageStatus;
+import com.naver.nid.cover.parser.coverage.model.FileCoverageReport;
+import com.naver.nid.cover.parser.coverage.model.LineCoverageReport;
+import com.naver.nid.cover.parser.diff.DiffParser;
+import com.naver.nid.cover.parser.diff.RawDiffReader;
+import com.naver.nid.cover.parser.diff.model.Diff;
+import com.naver.nid.cover.parser.diff.model.DiffSection;
+import com.naver.nid.cover.parser.diff.model.Line;
+import com.naver.nid.cover.parser.diff.model.ModifyType;
+import com.naver.nid.cover.reporter.Reporter;
+import com.naver.nid.cover.util.Parameter;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+
+@ExtendWith(MockitoExtension.class)
+class CoverCheckerTest {
+
+	@Mock
+	private GithubPullRequestManager manager;
+
+	@Mock
+	private Reporter reporter;
+
+	@Mock
+	private DiffParser diffParser;
+
+	@Mock
+	private CoverageReportParser coverageReportParser;
+
+	@Mock
+	private NewCoverageChecker checker;
+
+	@Mock
+	private RawDiffReader reader;
+
+	@Test
+	public void testCheck() {
+		CoverChecker coverChecker = spy(new CoverChecker(manager, coverageReportParser, diffParser, checker, reporter));
+
+		List<Line> lines = Arrays.asList(
+				Line.builder().lineNumber(1).type(ModifyType.ADD).build()
+				, Line.builder().lineNumber(2).type(ModifyType.ADD).build());
+
+		List<DiffSection> diffSectionList = Collections.singletonList(DiffSection.builder().lineList(lines).build());
+		Stream<Diff> diffStream = Stream.of(Diff.builder().fileName("test.java").diffSectionList(diffSectionList).build());
+
+
+		LineCoverageReport lineCoverageReport = new LineCoverageReport();
+		lineCoverageReport.setStatus(CoverageStatus.COVERED);
+		lineCoverageReport.setLineNum(1);
+
+		LineCoverageReport lineCoverageReport2 = new LineCoverageReport();
+		lineCoverageReport2.setStatus(CoverageStatus.UNCOVERED);
+		lineCoverageReport2.setLineNum(2);
+
+		FileCoverageReport fileCoverageReport = new FileCoverageReport();
+		fileCoverageReport.setType("java");
+		fileCoverageReport.setFileName("test.java");
+		fileCoverageReport.setLineCoverageReportList(Arrays.asList(lineCoverageReport, lineCoverageReport2));
+		List<FileCoverageReport> coverage = Collections.singletonList(fileCoverageReport);
+
+		NewCoverageCheckReport newCoverageCheckReport = NewCoverageCheckReport.builder()
+				.threshold(50)
+				.totalNewLine(2)
+				.coveredNewLine(1)
+				.coveredFilesInfo(
+						Collections.singletonList(NewCoveredFile.builder()
+								.name("test.java")
+								.addedLine(2)
+								.addedCoverLine(1)
+								.build()))
+				.build();
+		newCoverageCheckReport.setFileThreshold(30);
+
+		List<Diff> diffList = diffStream.collect(Collectors.toList());
+		doReturn(diffList.stream()).when(diffParser).parse(reader);
+		doReturn(coverage).when(coverageReportParser).parse((String) null);
+		doReturn(newCoverageCheckReport).when(checker).check(coverage, diffList, 50, 30);
+
+		Parameter param = Parameter.builder()
+				.coveragePath(null)
+				.diffPath("/path")
+				.coverageType("jacoco")
+				.githubToken("token")
+				.githubUrl("enterprise.github.com")
+				.prNumber(1)
+				.threshold(50)
+				.fileThreshold(30)
+				.repo("test/test")
+				.diffType("file")
+				.build();
+		doReturn(reader).when(coverChecker).createDiffReader(param);
+
+		coverChecker.check(param);
+
+		verify(diffParser).parse(reader);
+		verify(coverageReportParser).parse((String) null);
+		verify(checker).check(coverage, diffList, 50, 30);
+	}
+}
