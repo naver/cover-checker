@@ -1,5 +1,72 @@
 # Coverage Checker
 
+CoverChecker check test coverage of new line of code. If you create new pull request then CoverChecker feedback to  how much test covered new lines.
+
+Code coverage is describe one of code quality. Good test code find bug before release also prevent service disable.
+
+> [Spring REST doc](https://spring.io/projects/spring-restdocs) is one of spring component. it makes api document from test code.
+
+Therefore many developer wants write test code and improve code coverage. But old legacy code and project release date is not allow write them. CoverChecker will reduce pressure and get more coverage. It makes your code more durable.
+
+# CoverChecker do...
+
+![example](doc/example.png)
+
+- Find new code line from pull request
+- Get test coverage each file from coverage report
+- Combine information and check test code cover new code line
+- Write report on pull request
+- CoverChecker will fail when coverage not satisfy your goal
+
+# Run with jenkins
+
+1. install jdk 8 on your ci
+2. build CoverChecker
+3. Fix your project generate test coverage report(use jacoco or cobertura)
+4. execute coverchecker in you build job
+
+# How to build
+
+Use maven wrapper
+
+```sh
+./mvnw clean compile package
+```
+
+then maven make jar `target/coverchecker-${version}-jar-with-dependencies.jar`
+
+# Execute with parameter
+
+```sh
+java -jar target/coverchecker-${version}-jar-with-dependencies.jar \
+    -c ${coverageReportPath} \
+    -g ${githubAccessToken} \
+    -r ${githubRepositoryPath} \
+    -t ${coverageThreshold} \
+    -u ${githubHost} \
+    -p ${pullrequestNo} \
+    -type (jacoco | cobertura)
+```
+
+### Parameter
+
+```sh
+usage: coverchecker.jar -c <arg> [-d <arg>] [-dt <arg>] [-ft <arg>] -g <arg> [-p <arg>] -r <arg> -t <arg> [-type <arg>] -u <arg>
+
+-c,--cover <arg>          coverage report path(recommend absolute path)
+-d,--diff <arg>           diff file path(recommend absolute path)
+-dt,--diff-type <arg>     diff type (github | file)
+-ft,--file-threshold <arg>file pass threshold default : 0
+-g,--github-token <arg>   github oauth token
+-p,--pr <arg>             github pr number default : ${ghprbPullId} from github pull request builder
+-r,--repo <arg>           github repo
+-t,--threshold <arg>      coverage pass threshold
+-type <arg>               coverage report type (jacoco | cobertura) default : jacoco
+-u,--github-url <arg>     github url
+```
+
+---
+
 이 스크립트는 신규 코드에 대한 코드 커버리지를 측정하여 프로젝트 기준에 충족하는지를 판별하고  
 해당 pr에서 변경된 소스코드의 코드 커버리지가 어떻게 되는지 풀 리퀘스트에 피드백을 해줍니다.
 
@@ -7,7 +74,7 @@
 제대로 작성된 테스트코드는 릴리즈 이전 소스코드의 버그를 미리 탐지하고 
 그로 인해 발생할 수 있는 장애를 미연에 방지할 수 있습니다.
 
-> 최근 스프링의 컴포넌트 중 하나인 [restdoc](https://www.baeldung.com/spring-rest-docs)의 경우 작성한 
+> 최근 스프링의 컴포넌트 중 하나인 [Spring REST doc](https://spring.io/projects/spring-restdocs)의 경우 작성한 
 테스트 코드를 참고하여 자동으로 api 문서를 만들어주기도 합니다.
 
 이런 이유로 많은 팀에서 테스트 코드를 적용하기 위해 노력하고 있지만 
