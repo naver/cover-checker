@@ -22,7 +22,7 @@ Therefore many developer wants write test code and improve code coverage. But ol
 
 1. install jdk 8 on your ci
 2. build CoverChecker
-3. Fix your project generate test coverage report(use jacoco or cobertura)
+3. Fix your project generate test coverage report(CoverChecker only jacoco or cobertura)
 4. execute coverchecker in you build job
 
 # How to build

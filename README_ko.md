@@ -26,9 +26,9 @@
 ## 적용 방법 (jenkins)
 
 - 사용하시는 ci 혹은 빌드 서버에 `1.8 버전 이상의 jdk`를 설치합니다.
-- 소스를 클론한 후 빌드합니다. 빌드방법은 아래를 참고합니다.
-- 생성된 jar파일을 적당한 위치에 둡니다.
-- jenkins coverage 체크 잡에서 coverage report를 생성하도록 빌드 설정을 변경합니다. 현재 지원하는 레포트는 `jacoco html`, `jacoco xml`, `cobertura xml` 입니다.
+- CoverChecker를 클론한 후 빌드합니다.
+- 생성된 jar 파일을 원하는 위치에 둡니다.
+- jenkins 잡에서 coverage report를 생성하도록 빌드 설정을 변경합니다. 현재 지원하는 레포트는 `jacoco html`, `jacoco xml`, `cobertura xml` 입니다.
 - post build 설정으로 스크립트가 실행되게 합니다. 실행 방법은 아래를 참고합니다.
 - 정상적으로 실행되면 풀 리퀘스트에 다음과 같이 나타납니다.
 
