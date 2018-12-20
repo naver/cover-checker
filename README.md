@@ -1,4 +1,4 @@
-# Coverage Checker
+# Coverage Checker [![Build Status](https://travis-ci.org/naver/cover-checker.svg?branch=master)](https://travis-ci.org/naver/cover-checker)
 
 이 스크립트는 신규 코드에 대한 코드 커버리지를 측정하여 프로젝트 기준에 충족하는지를 판별하고  
 해당 pr에서 변경된 소스코드의 코드 커버리지가 어떻게 되는지 풀 리퀘스트에 피드백을 해줍니다.
