@@ -1,12 +1,18 @@
 # Coverage Checker
 
-CoverChecker check test coverage of new line of code. If you create new pull request then CoverChecker feedback to  how much test covered new lines.
+CoverChecker provides a test coverage for new added lines of code.
+If you create new pull request, CoverChecker would give feedback regarding how much of the new lines your test code has covered.
 
-Code coverage is describe one of code quality. Good test code find bug before release also prevent service disable.
+Good Test code makes people find bug more efficiently before service release and prevents service from being disabled.
+To check the test code quality, most of developers refer the code coverage status as an important index.
+This is why most of them spend their resources to update their test code to achieve more code coverage whenever they add new lines of code.
+However, it has been hard to check and improve the code coverage as there are lots of old legacy codes which is not within the scope of the current test code.
 
 > [Spring REST doc](https://spring.io/projects/spring-restdocs) is one of spring component. it makes api document from test code.
 
-Therefore many developer wants write test code and improve code coverage. But old legacy code and project release date is not allow write them. CoverChecker will reduce pressure and get more coverage. It makes your code more durable.
+CoverChecker provides a feature to check the code coverage for new added code, not a whole code.
+It will reduce the pressure to cover the whole and help you to achieve more coverage steadly and efficiently.
+Makes your code more durable!
 
 # CoverChecker do...
 
@@ -16,14 +22,14 @@ Therefore many developer wants write test code and improve code coverage. But ol
 - Get test coverage each file from coverage report
 - Combine information and check test code cover new code line
 - Write report on pull request
-- CoverChecker will fail when coverage not satisfy your goal
+- CoverChecker will fail when coverage doesn't satisfy your goal
 
 # Run with jenkins
 
 1. install jdk 8 on your ci
 2. build CoverChecker
-3. Fix your project generate test coverage report(CoverChecker only jacoco or cobertura)
-4. execute coverchecker in you build job
+3.  Fix your project to generate test coverage report(CoverChecker only Jacoco or Cobertura)
+4. execute CoverChecker in you build job
 
 # How to build
 
@@ -33,7 +39,7 @@ Use maven wrapper
 ./mvnw clean compile package
 ```
 
-then maven make jar `target/coverchecker-${version}-jar-with-dependencies.jar`
+then maven would make jar `target/coverchecker-${version}-jar-with-dependencies.jar`
 
 # Execute with parameter
 
