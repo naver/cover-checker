@@ -31,7 +31,7 @@ public class NewCoverageCheckReport {
 	private int totalNewLine;
 	private int coveredNewLine;
 	private int threshold;
-	private String error;
+	private Exception error;
 	private List<NewCoveredFile> coveredFilesInfo;
 
 	public void setFileThreshold(int threshold) {

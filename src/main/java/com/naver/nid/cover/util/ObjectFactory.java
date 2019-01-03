@@ -54,7 +54,7 @@ public class ObjectFactory {
     }
 
     public Reporter getReporter() {
-        return new ConsoleReporter().andThen(new GithubPullRequestReporter(getPrManager()));
+        return (Reporter) new ConsoleReporter().andThen(new GithubPullRequestReporter(getPrManager()));
     }
 
     public GithubPullRequestManager getPrManager() {

@@ -27,7 +27,4 @@ public interface Reporter extends Consumer<NewCoverageCheckReport> {
 		report(result);
 	}
 
-	default Reporter andThen(Reporter reporter) {
-		return result -> andThen((Consumer<NewCoverageCheckReport>) reporter).accept(result);
-	}
 }

@@ -16,6 +16,7 @@
 package com.naver.nid.cover.reporter.console;
 
 import com.naver.nid.cover.checker.model.NewCoverageCheckReport;
+import com.naver.nid.cover.checker.model.NewCoverageCheckResult;
 import com.naver.nid.cover.reporter.Reporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +27,14 @@ public class ConsoleReporter implements Reporter {
 	@Override
 	public void report(NewCoverageCheckReport result) {
 		logger.info("coverage check result");
-		logger.info("{}/{} {}", result.getCoveredNewLine(), result.getTotalNewLine(), result.getCoverage());
-		result.getCoveredFilesInfo().stream()
-				.filter(f -> f.getAddedLine() > 0)
-				.forEach(f -> logger.info("{} {}/{} {}", f.getName(), f.getAddedCoverLine(), f.getAddedLine(), f.getCoverage()));
+		if (result.result() != NewCoverageCheckResult.ERROR) {
+			logger.info("{}/{} {}", result.getCoveredNewLine(), result.getTotalNewLine(), result.getCoverage());
+
+			result.getCoveredFilesInfo().stream()
+					.filter(f -> f.getAddedLine() > 0)
+					.forEach(f -> logger.info("{} {}/{} {}", f.getName(), f.getAddedCoverLine(), f.getAddedLine(), f.getCoverage()));
+		} else {
+			logger.error("result error occurred", result.getError());
+		}
 	}
 }
