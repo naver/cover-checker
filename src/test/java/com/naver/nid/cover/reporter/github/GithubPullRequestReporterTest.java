@@ -171,7 +171,7 @@ class GithubPullRequestReporterTest {
 		doNothing().when(mockStatusManager).setStatus(commitStatus);
 
 		NewCoverageCheckReport result = NewCoverageCheckReport.builder()
-				.error("test error")
+				.error(new Exception("test error"))
 				.build();
 		reporter.report(result);
 
