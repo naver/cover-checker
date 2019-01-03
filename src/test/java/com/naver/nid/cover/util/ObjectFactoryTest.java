@@ -1,19 +1,16 @@
 package com.naver.nid.cover.util;
 
 import com.naver.nid.cover.checker.NewCoverageChecker;
-import com.naver.nid.cover.github.GithubPullRequestManager;
 import com.naver.nid.cover.parser.coverage.CoverageReportParser;
 import com.naver.nid.cover.parser.coverage.XmlCoverageReportParser;
 import com.naver.nid.cover.parser.coverage.cobertura.CoberturaReportHandler;
 import com.naver.nid.cover.parser.coverage.jacoco.JacocoReportParser;
 import com.naver.nid.cover.parser.diff.DiffParser;
-import com.naver.nid.cover.reporter.Reporter;
-import org.eclipse.egit.github.core.RepositoryId;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ObjectFactoryTest {
 
