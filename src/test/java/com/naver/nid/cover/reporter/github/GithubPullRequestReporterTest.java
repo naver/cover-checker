@@ -60,6 +60,8 @@ class GithubPullRequestReporterTest {
 			"\n" +
 			"coverage check fail. please retry. :fearful:\n" +
 			"\n" +
+			"[Please let me know](https://github.com/naver/cover-checker/issues/new) when error again.\n" +
+			"\n" +
 			"test error";
 
 	private GithubPullRequestManager mockPrManager;
