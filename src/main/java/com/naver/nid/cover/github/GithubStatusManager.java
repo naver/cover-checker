@@ -16,12 +16,15 @@
 package com.naver.nid.cover.github;
 
 import com.naver.nid.cover.github.model.CommitStatusCreate;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.egit.github.core.CommitStatus;
 import org.eclipse.egit.github.core.RepositoryId;
 import org.eclipse.egit.github.core.client.GitHubClient;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 
+@Slf4j
 public class GithubStatusManager {
 
 	private GitHubClient client;
@@ -34,8 +37,12 @@ public class GithubStatusManager {
 		this.sha = sha;
 	}
 
-	public void setStatus(CommitStatusCreate status) throws IOException {
+	public void setStatus(CommitStatusCreate status) {
 		String url = String.format("/repos/%s/statuses/%s", repoId.generateId(), sha);
-		client.post(url, status, CommitStatus.class);
+		try {
+			client.post(url, status, CommitStatus.class);
+		} catch (Exception e) {
+			log.warn("error while set status({}) {}", url, e);
+		}
 	}
 }
