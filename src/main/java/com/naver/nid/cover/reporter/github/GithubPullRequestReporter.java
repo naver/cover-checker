@@ -100,7 +100,7 @@ public class GithubPullRequestReporter implements Reporter {
 		if (result.getError() != null) {
 			return CommitStatusCreate.builder()
 					.state(CommitStatusCreate.State.error)
-					.description("error - " + result.getError())
+					.description("error - " + result.getError().getMessage())
 					.context("coverchecker").build();
 		} else {
 			return CommitStatusCreate.builder()
@@ -114,7 +114,7 @@ public class GithubPullRequestReporter implements Reporter {
 		if (result.getError() != null) {
 			Map<String, Object> templateParams = new HashMap<>();
 			templateParams.put("title", REPORT_HEADER);
-			templateParams.put("error", result.getError());
+			templateParams.put("error", result.getError().getMessage());
 			templateParams.put("icon", result.result().icon);
 			return bind("error", templateParams);
 		}

@@ -72,7 +72,7 @@ public final class CoverChecker {
 		} catch (Exception e) {
 			log.error("check result fail", e);
 			NewCoverageCheckReport failResult = NewCoverageCheckReport.builder()
-					.error(e.getMessage())
+					.error(e)
 					.build();
 
 			reporter.report(failResult);
