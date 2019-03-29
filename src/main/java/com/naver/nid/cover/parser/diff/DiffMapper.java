@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * 1차로 파싱된 {@link RawDiff}를 {@link Diff}로 파싱
@@ -40,7 +41,8 @@ public class DiffMapper implements Function<RawDiff, Diff> {
 	}
 
 	private static final Pattern NEW_FILE_COUNT_PATTERN = Pattern.compile("\\+([0-9]+),([0-9]+)");
-	private static final Pattern SECTION_START_PATTERN = Pattern.compile("@@ -([0-9]+),([0-9]+) \\+([0-9]+),([0-9]+) @@");
+	private static final Pattern SINGLE_LINE_FILE_COUNT_PATTERN = Pattern.compile("\\+([0-9]+)");
+	private static final Pattern SECTION_START_PATTERN = Pattern.compile("@@ -([0-9]+),?([0-9]+)? \\+([0-9]+),?([0-9]+)? @@");
 
 	@Override
 	public Diff apply(RawDiff rawDiff) {
@@ -122,11 +124,18 @@ public class DiffMapper implements Function<RawDiff, Diff> {
 			if (isEof(currLine)) continue;
 			if (isSectionStart(currLine)) {
 
-				Matcher matcher = NEW_FILE_COUNT_PATTERN.matcher(currLine);
-				if (!matcher.find()) {
+				// get matcher which matched section pattern
+				Optional<Matcher> matchedPattern = Stream.of(NEW_FILE_COUNT_PATTERN, SINGLE_LINE_FILE_COUNT_PATTERN)
+						.map(p -> p.matcher(currLine))
+						.filter(Matcher::find)
+						.findFirst();
+
+				// current line is not matched any start pattern
+				if (!matchedPattern.isPresent()) {
 					log.error("not expect pattern {}", currLine);
-					throw new ParseException("not expected pattern");
+					return Optional.empty();
 				}
+				Matcher matcher = matchedPattern.get();
 				baseLineNum = Integer.parseInt(matcher.group(1));
 				lineCnt = 0;
 
