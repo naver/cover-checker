@@ -26,6 +26,14 @@ public class CommitStatusCreate {
 	private String description;
 	private String context;
 
+	public String getDescription() {
+		if (description.length() > 135) {
+			return description.substring(0, 132) + "...";
+		} else {
+			return description;
+		}
+	}
+
 	public enum State {
 		success, failure, pending, error
 	}
