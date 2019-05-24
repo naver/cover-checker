@@ -1,5 +1,6 @@
 package com.naver.nid.cover.github;
 
+import com.naver.nid.cover.github.model.CommitState;
 import com.naver.nid.cover.github.model.CommitStatusCreate;
 import org.eclipse.egit.github.core.CommitStatus;
 import org.eclipse.egit.github.core.RepositoryId;
@@ -23,7 +24,7 @@ class GithubStatusManagerTest {
 	@Test
 	public void setStatus() throws IOException {
 		CommitStatusCreate commitStatus = CommitStatusCreate.builder()
-				.state(CommitStatusCreate.State.success)
+				.state(CommitState.SUCCESS)
 				.description("0 / 0 (100%) - pass")
 				.context("coverchecker").build();
 		when(mockGithubClient.post("/repos/test/test/statuses/sha", commitStatus, CommitStatus.class)).thenReturn(new CommitStatus().setDescription("0 / 0 (100%) - pass"));

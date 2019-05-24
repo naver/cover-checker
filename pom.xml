@@ -48,7 +48,7 @@
         <dependency>
             <groupId>org.eclipse.mylyn.github</groupId>
             <artifactId>org.eclipse.egit.github.core</artifactId>
-            <version>2.1.5</version>
+            <version>5.4.0.201905081430-m2</version>
         </dependency>
 
         <dependency>
@@ -94,6 +94,13 @@
 
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>eclipse</id>
+            <name>eclipse repository</name>
+            <url>https://repo.eclipse.org/content/repositories/egit-releases/</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>
