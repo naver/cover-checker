@@ -4,21 +4,22 @@ import com.naver.nid.cover.github.model.CommitState;
 import com.naver.nid.cover.github.model.CommitStatusCreate;
 import org.eclipse.egit.github.core.CommitStatus;
 import org.eclipse.egit.github.core.RepositoryId;
-import org.eclipse.egit.github.core.client.GitHubClient;
+import org.eclipse.egit.github.core.service.CommitService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 class GithubStatusManagerTest {
 
-	private GitHubClient mockGithubClient;
+	private CommitService commitService;
 
 	@BeforeEach
 	public void init() {
-		mockGithubClient = mock(GitHubClient.class);
+		commitService = mock(CommitService.class);
 	}
 
 	@Test
@@ -27,13 +28,14 @@ class GithubStatusManagerTest {
 				.state(CommitState.SUCCESS)
 				.description("0 / 0 (100%) - pass")
 				.context("coverchecker").build();
-		when(mockGithubClient.post("/repos/test/test/statuses/sha", commitStatus, CommitStatus.class)).thenReturn(new CommitStatus().setDescription("0 / 0 (100%) - pass"));
+		RepositoryId repoId = new RepositoryId("test", "test");
+		when(commitService.createStatus(eq(repoId), eq("sha"), any(CommitStatus.class))).thenReturn(new CommitStatus().setDescription("0 / 0 (100%) - pass"));
 
-		GithubStatusManager statusManager = new GithubStatusManager(mockGithubClient, new RepositoryId("test", "test"), "sha");
+		GithubStatusManager statusManager = new GithubStatusManager(commitService, repoId, "sha");
 
 		statusManager.setStatus(commitStatus);
 
-		verify(mockGithubClient).post("/repos/test/test/statuses/sha", commitStatus, CommitStatus.class);
+		verify(commitService).createStatus(eq(repoId), eq("sha"), any(CommitStatus.class));
 	}
 
 }

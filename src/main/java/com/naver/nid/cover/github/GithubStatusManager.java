@@ -18,7 +18,6 @@ package com.naver.nid.cover.github;
 import com.naver.nid.cover.github.model.CommitStatusCreate;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.egit.github.core.RepositoryId;
-import org.eclipse.egit.github.core.client.GitHubClient;
 import org.eclipse.egit.github.core.service.CommitService;
 
 @Slf4j
@@ -28,8 +27,8 @@ public class GithubStatusManager {
 	private RepositoryId repoId;
 	private String sha;
 
-	GithubStatusManager(GitHubClient client, RepositoryId repoId, String sha) {
-		commitService = new CommitService(client);
+	GithubStatusManager(CommitService service, RepositoryId repoId, String sha) {
+		commitService = service;
 		this.repoId = repoId;
 		this.sha = sha;
 	}
