@@ -5,14 +5,12 @@ import com.naver.nid.cover.checker.model.NewCoveredFile;
 import com.naver.nid.cover.github.GithubCommentManager;
 import com.naver.nid.cover.github.GithubPullRequestManager;
 import com.naver.nid.cover.github.GithubStatusManager;
+import com.naver.nid.cover.github.model.CommitState;
 import com.naver.nid.cover.github.model.CommitStatusCreate;
 import org.eclipse.egit.github.core.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -89,7 +87,7 @@ class GithubPullRequestReporterTest {
 		doNothing().when(mockCommentManager).addComment(COMMENT_WITH_FILE);
 
 		CommitStatusCreate commitStatus = CommitStatusCreate.builder()
-				.state(CommitStatusCreate.State.success)
+				.state(CommitState.SUCCESS)
 				.description("2 / 3 (66%) - pass")
 				.context("coverchecker").build();
 		doNothing().when(mockStatusManager).setStatus(commitStatus);
@@ -116,7 +114,7 @@ class GithubPullRequestReporterTest {
 		doNothing().when(mockCommentManager).addComment(COMMENT_WITH_CONFUSE);
 
 		CommitStatusCreate commitStatus = CommitStatusCreate.builder()
-				.state(CommitStatusCreate.State.pending)
+				.state(CommitState.PENDING)
 				.description("2 / 3 (66%) - check")
 				.context("coverchecker").build();
 		doNothing().when(mockStatusManager).setStatus(commitStatus);
@@ -143,7 +141,7 @@ class GithubPullRequestReporterTest {
 		doNothing().when(mockCommentManager).addComment(COMMENT_WITHOUT_FILE);
 
 		CommitStatusCreate commitStatus = CommitStatusCreate.builder()
-				.state(CommitStatusCreate.State.success)
+				.state(CommitState.SUCCESS)
 				.description("0 / 0 (100%) - pass")
 				.context("coverchecker").build();
 		doNothing().when(mockStatusManager).setStatus(commitStatus);
@@ -167,7 +165,7 @@ class GithubPullRequestReporterTest {
 
 		doNothing().when(mockCommentManager).addComment(COMMENT_ERROR);
 		CommitStatusCreate commitStatus = CommitStatusCreate.builder()
-				.state(CommitStatusCreate.State.error)
+				.state(CommitState.ERROR)
 				.description("error - test error")
 				.context("coverchecker").build();
 		doNothing().when(mockStatusManager).setStatus(commitStatus);

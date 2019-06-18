@@ -15,15 +15,22 @@
  */
 package com.naver.nid.cover.checker.model;
 
+import com.naver.nid.cover.github.model.CommitState;
+
 import static com.naver.nid.cover.checker.model.ResultIcon.*;
 
 public enum NewCoverageCheckResult {
-	PASS(CHECK_ALL_PASS), FAIL(CHECK_ALL_FAIL), CHECK(CHECK_ALL_CONFUSE), ERROR(CHECK_ALL_ERROR);
+	PASS(CHECK_ALL_PASS, CommitState.SUCCESS),
+	FAIL(CHECK_ALL_FAIL, CommitState.FAILURE),
+	CHECK(CHECK_ALL_CONFUSE, CommitState.PENDING),
+	ERROR(CHECK_ALL_ERROR, CommitState.ERROR);
 
 	public final String icon;
+	public final CommitState githubState;
 
-	NewCoverageCheckResult(String icon) {
+	NewCoverageCheckResult(String icon, CommitState githubState) {
 		this.icon = icon;
+		this.githubState = githubState;
 	}
 
 	@Override

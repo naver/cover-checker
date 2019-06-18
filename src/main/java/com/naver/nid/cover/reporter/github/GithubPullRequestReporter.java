@@ -16,14 +16,13 @@
 package com.naver.nid.cover.reporter.github;
 
 import com.naver.nid.cover.checker.model.NewCoverageCheckReport;
-import com.naver.nid.cover.checker.model.NewCoverageCheckResult;
 import com.naver.nid.cover.github.GithubCommentManager;
 import com.naver.nid.cover.github.GithubPullRequestManager;
 import com.naver.nid.cover.github.GithubStatusManager;
+import com.naver.nid.cover.github.model.CommitState;
 import com.naver.nid.cover.github.model.CommitStatusCreate;
 import com.naver.nid.cover.reporter.Reporter;
 import com.naver.nid.cover.reporter.exception.ReportException;
-import com.naver.nid.cover.checker.util.ResultUtils;
 import org.eclipse.egit.github.core.Comment;
 import org.eclipse.egit.github.core.User;
 import org.slf4j.Logger;
@@ -99,12 +98,12 @@ public class GithubPullRequestReporter implements Reporter {
 	private CommitStatusCreate getCommitStatus(NewCoverageCheckReport result) {
 		if (result.getError() != null) {
 			return CommitStatusCreate.builder()
-					.state(CommitStatusCreate.State.error)
+					.state(CommitState.ERROR)
 					.description("error - " + result.getError().getMessage())
 					.context("coverchecker").build();
 		} else {
 			return CommitStatusCreate.builder()
-					.state(ResultUtils.resultToGithubState(result.result()))
+					.state(result.result().githubState)
 					.description(String.format("%d / %d (%d%%) - %s", result.getCoveredNewLine(), result.getTotalNewLine(), result.getCoverage(), result.result()))
 					.context("coverchecker").build();
 		}

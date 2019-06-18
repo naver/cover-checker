@@ -17,11 +17,12 @@ package com.naver.nid.cover.github.model;
 
 import lombok.Builder;
 import lombok.Data;
+import org.eclipse.egit.github.core.CommitStatus;
 
 @Data
 @Builder(builderClassName = "Builder")
 public class CommitStatusCreate {
-	private final State state;
+	private final CommitState state;
 	private String targetUrl;
 	private String description;
 	private String context;
@@ -34,7 +35,11 @@ public class CommitStatusCreate {
 		}
 	}
 
-	public enum State {
-		success, failure, pending, error
+	public CommitStatus toCommitStatus() {
+		return new CommitStatus()
+			.setContext(getContext())
+			.setDescription(getDescription())
+			.setState(getState().toApiValue())
+			.setTargetUrl(getTargetUrl());
 	}
 }
