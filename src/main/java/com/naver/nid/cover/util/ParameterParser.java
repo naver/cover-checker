@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 public class ParameterParser {
 	private static final Logger logger = LoggerFactory.getLogger(ParameterParser.class);
@@ -53,7 +54,7 @@ public class ParameterParser {
 				.fileThreshold(getFileThreshold(cmd))
 				.githubToken(cmd.getOptionValue("g"))
 				.diffPath(cmd.getOptionValue("d"))
-				.coveragePath(cmd.getOptionValue("c"))
+				.coveragePath(Arrays.asList(cmd.getOptionValues("c")))
 				.githubUrl(cmd.getOptionValue("u", IGitHubConstants.HOST_API))
 				.repo(cmd.getOptionValue("r"))
 				.diffType(cmd.getOptionValue("diff-type"))

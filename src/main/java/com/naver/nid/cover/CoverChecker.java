@@ -29,10 +29,13 @@ import com.naver.nid.cover.util.ParameterParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -57,8 +60,11 @@ public final class CoverChecker {
 			RawDiffReader diffReader = createDiffReader(param);
 
 			log.info("Check new line of code coverage by {}", coverageParser.getClass().getSimpleName());
-			CompletableFuture<List<FileCoverageReport>> coverage = executeByBackground((Function<String, List<FileCoverageReport>>) coverageParser::parse)
-					.apply(param.getCoveragePath());
+			CompletableFuture<List<FileCoverageReport>> coverage = param.getCoveragePath().stream()
+				.map(s -> executeByBackground((Function<String, List<FileCoverageReport>>) coverageParser::parse).apply(s))
+				.reduce((f1, f2) -> f1.thenCombineAsync(f2, (r1, r2) ->
+						Stream.concat(r1.stream(), r2.stream()).collect(Collectors.toList())))
+				.orElseThrow(() -> new IllegalStateException(""));
 
 			log.info("read diff by {}", diffReader.getClass().getSimpleName());
 			CompletableFuture<List<Diff>> diff = executeByBackground(diffParser::parse)
