@@ -87,62 +87,66 @@ public class ParameterParser {
 	private Options executeOption() {
 		Options commandOptions = new Options();
 
-		Option diffPath = new Option("d", DIFF_OPTION, true, "diff file path(absolute recommend)");
-		commandOptions.addOption(diffPath);
-
-		Option githubToken = new Option("g", GITHUB_TOKEN_OPTION, true, "github oauth token");
-		githubToken.setRequired(true);
-		commandOptions.addOption(githubToken);
-
-		Option githubUrl = Option.builder("u")
-				.desc("The url when you working on github enterprise url. default is api.github.com").hasArg()
-				.longOpt("github-url")
-				.build();
-		commandOptions.addOption(githubUrl);
-
-		Option githubPrNum = Option.builder("p")
-				.desc("github pr number").hasArg()
-				.longOpt("pr")
-				.build();
-		commandOptions.addOption(githubPrNum);
-
-		Option githubRepo = Option.builder("r").required()
-				.desc("github repo").hasArg()
-				.longOpt("repo")
-				.build();
-		commandOptions.addOption(githubRepo);
-
-		Option thresholdOption = Option.builder("t").required()
-				.desc("coverage pass threshold").hasArg()
-				.longOpt(THRESHOLD_OPTION).type(Integer.class)
-				.build();
-		commandOptions.addOption(thresholdOption);
-
-		Option coverReportPath = Option.builder("c")
-				.longOpt(COVERAGE_PATH_OPTION).hasArg()
-				.required()
-				.desc("coverage report path(absolute recommend)").build();
-		commandOptions.addOption(coverReportPath);
-
-		Option coverReportType = Option.builder(COVERAGE_TYPE_OPTION)
+		commandOptions.addOption(Option.builder("d")
+				.longOpt(DIFF_OPTION)
 				.hasArg()
-				.desc("coverage report type (jacoco | cobertura) default is jacoco")
-				.build();
-		commandOptions.addOption(coverReportType);
+				.desc("diff file path(absolute recommend)")
+				.build());
 
-		Option fileThresholdOption = Option.builder("ft")
-				.longOpt("file-threshold")
-				.hasArg()
-				.desc("coverage report type (jacoco | cobertura) default is jacoco")
-				.build();
-		commandOptions.addOption(fileThresholdOption);
-
-		Option diffType = Option.builder("dt")
+		commandOptions.addOption(Option.builder("dt")
 				.longOpt("diff-type")
 				.hasArg()
 				.desc("diff type (github | file)")
-				.build();
-		commandOptions.addOption(diffType);
+				.build());
+
+		commandOptions.addOption(Option.builder("g")
+				.longOpt(GITHUB_TOKEN_OPTION)
+				.required()
+				.hasArg()
+				.desc("github oauth token")
+				.build());
+
+		commandOptions.addOption(Option.builder("u")
+				.longOpt("github-url")
+				.hasArg()
+				.desc("The url when you working on github enterprise url. default is api.github.com")
+				.build());
+
+		commandOptions.addOption(Option.builder("p")
+				.longOpt("pr")
+				.hasArg()
+				.desc("github pr number")
+				.build());
+
+		commandOptions.addOption(Option.builder("r").required()
+				.longOpt("repo")
+				.hasArg()
+				.desc("github repo")
+				.build());
+
+		commandOptions.addOption(Option.builder("c")
+				.longOpt(COVERAGE_PATH_OPTION)
+				.hasArg()
+				.required()
+				.desc("coverage report path(absolute recommend)")
+				.build());
+
+		commandOptions.addOption(Option.builder(COVERAGE_TYPE_OPTION)
+				.hasArg()
+				.desc("coverage report type (jacoco | cobertura) default is jacoco")
+				.build());
+
+		commandOptions.addOption(Option.builder("t").required()
+				.longOpt(THRESHOLD_OPTION).type(Integer.class)
+				.hasArg()
+				.desc("coverage pass threshold")
+				.build());
+
+		commandOptions.addOption(Option.builder("ft")
+				.longOpt("file-threshold")
+				.hasArg()
+				.desc("coverage report type (jacoco | cobertura) default is jacoco")
+				.build());
 
 		return commandOptions;
 	}
