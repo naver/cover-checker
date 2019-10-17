@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level [%file:%line] %msg%n</pattern>
-        </encoder>
-    </appender>
+    <include resource="pattern.xml" />
 
     <logger name="com.naver.nid.cover.parser.diff" level="INFO" />
     <logger name="com.naver.nid.cover.parser.coverage" level="INFO" />

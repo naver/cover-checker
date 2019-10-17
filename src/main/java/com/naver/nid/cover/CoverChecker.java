@@ -55,7 +55,7 @@ public final class CoverChecker {
 				objectManager.getReporter());
 	}
 
-	public void check(Parameter param) {
+	public boolean check(Parameter param) {
 		try {
 			RawDiffReader diffReader = createDiffReader(param);
 
@@ -75,12 +75,14 @@ public final class CoverChecker {
 
 			reporter.report(check);
 			log.info("check result {}", check.result());
+			return true;
 		} catch (Exception e) {
 			NewCoverageCheckReport failResult = NewCoverageCheckReport.builder()
 					.error(e)
 					.build();
 
 			reporter.report(failResult);
+			return false;
 		}
 	}
 
