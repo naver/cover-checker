@@ -62,8 +62,7 @@ public final class CoverChecker {
 			log.info("Check new line of code coverage by {}", coverageParser.getClass().getSimpleName());
 			CompletableFuture<List<FileCoverageReport>> coverage = param.getCoveragePath().stream()
 				.map(s -> executeByBackground((Function<String, List<FileCoverageReport>>) coverageParser::parse).apply(s))
-				.reduce((f1, f2) -> f1.thenCombineAsync(f2, (r1, r2) ->
-						Stream.concat(r1.stream(), r2.stream()).collect(Collectors.toList())))
+				.reduce((f1, f2) -> f1.thenCombine(f2, (r1, r2) -> Stream.concat(r1.stream(), r2.stream()).collect(Collectors.toList())))
 				.orElseThrow(() -> new IllegalStateException(""));
 
 			log.info("read diff by {}", diffReader.getClass().getSimpleName());
