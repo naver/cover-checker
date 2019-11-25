@@ -15,6 +15,7 @@ import com.naver.nid.cover.parser.diff.model.DiffSection;
 import com.naver.nid.cover.parser.diff.model.Line;
 import com.naver.nid.cover.parser.diff.model.ModifyType;
 import com.naver.nid.cover.reporter.Reporter;
+import com.naver.nid.cover.reporter.console.ConsoleReporter;
 import com.naver.nid.cover.util.Parameter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -37,8 +39,7 @@ class CoverCheckerTest {
 	@Mock
 	private GithubPullRequestManager manager;
 
-	@Mock
-	private Reporter reporter;
+	private Reporter reporter = new ConsoleReporter();
 
 	@Mock
 	private DiffParser diffParser;
@@ -61,7 +62,8 @@ class CoverCheckerTest {
 				, Line.builder().lineNumber(2).type(ModifyType.ADD).build());
 
 		List<DiffSection> diffSectionList = Collections.singletonList(DiffSection.builder().lineList(lines).build());
-		Stream<Diff> diffStream = Stream.of(Diff.builder().fileName("test.java").diffSectionList(diffSectionList).build());
+		Stream<Diff> diffStream = Stream.of(Diff.builder().fileName("test.java").diffSectionList(diffSectionList).build(),
+			Diff.builder().fileName("test2.java").diffSectionList(diffSectionList).build());
 
 
 		LineCoverageReport lineCoverageReport = new LineCoverageReport();
@@ -76,7 +78,12 @@ class CoverCheckerTest {
 		fileCoverageReport.setType("java");
 		fileCoverageReport.setFileName("test.java");
 		fileCoverageReport.setLineCoverageReportList(Arrays.asList(lineCoverageReport, lineCoverageReport2));
-		List<FileCoverageReport> coverage = Collections.singletonList(fileCoverageReport);
+		FileCoverageReport fileCoverageReport2 = new FileCoverageReport();
+		fileCoverageReport.setType("java");
+		fileCoverageReport.setFileName("test2.java");
+		fileCoverageReport.setLineCoverageReportList(Arrays.asList(lineCoverageReport, lineCoverageReport2));
+		List<FileCoverageReport> coverageModule1 = Collections.singletonList(fileCoverageReport);
+		List<FileCoverageReport> coverageModule2 = Collections.singletonList(fileCoverageReport2);
 
 		NewCoverageCheckReport newCoverageCheckReport = NewCoverageCheckReport.builder()
 				.threshold(50)
@@ -90,15 +97,18 @@ class CoverCheckerTest {
 								.build()))
 				.build();
 		newCoverageCheckReport.setFileThreshold(30);
+		List<FileCoverageReport> coverageList = Stream.concat(coverageModule1.stream(), coverageModule2.stream()).collect(Collectors.toList());
 
 		List<Diff> diffList = diffStream.collect(Collectors.toList());
 		doReturn(diffList.stream()).when(diffParser).parse(reader);
-		doReturn(coverage).when(coverageReportParser).parse((String) null);
-		doReturn(newCoverageCheckReport).when(checker).check(coverage, diffList, 50, 30);
+		doReturn(coverageModule1).when(coverageReportParser).parse("test-module1");
+		doReturn(coverageModule2).when(coverageReportParser).parse("test-module2");
+		doReturn(newCoverageCheckReport).when(checker).check(coverageList, diffList, 50, 30);
 
 		Parameter param = Parameter.builder()
 				.coveragePath(null)
 				.diffPath("/path")
+				.coveragePath(Arrays.asList("test-module1", "test-module2"))
 				.coverageType("jacoco")
 				.githubToken("token")
 				.githubUrl("enterprise.github.com")
@@ -110,10 +120,11 @@ class CoverCheckerTest {
 				.build();
 		doReturn(reader).when(coverChecker).createDiffReader(param);
 
-		coverChecker.check(param);
+		assertTrue(coverChecker.check(param), "Coverchecker must finish successfully");
 
 		verify(diffParser).parse(reader);
-		verify(coverageReportParser).parse((String) null);
-		verify(checker).check(coverage, diffList, 50, 30);
+		verify(coverageReportParser).parse("test-module1");
+		verify(coverageReportParser).parse("test-module2");
+		verify(checker).check(coverageList, diffList, 50, 30);
 	}
 }

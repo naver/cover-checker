@@ -28,15 +28,20 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * diff 정보와 coverage report를 이용해 신규 코드에 대한 커버리지를 측정
+ * <p>코드의 변경점과 coverage 리포트를 이용해 신규 코드에 대한 커버리지를 측정</p>
+ *
+ * <p>NewCoverageChecker calculate test code coverage that updated.</p>
  */
 public class NewCoverageChecker {
 	private static final Logger logger = LoggerFactory.getLogger(NewCoverageChecker.class);
 
 	/**
-	 * coverage report 와 diff 를 확인하여 신규 코드의 테스트 코드의 커버 정도를 확인한다.
+	 * <p>coverage report 와 diff 를 확인하여 신규 코드의 테스트 코드의 커버 정도를 확인한다.</p>
+	 *
+	 * <p>The method Check will calculate test coverage for new code for compare test coverage report and code diff.</p>
 	 *
 	 * @param coverage      파일 커버리지 리포트 결과
 	 * @param diff          구 버전 파일과 신 버전 파일의 차이
@@ -46,35 +51,22 @@ public class NewCoverageChecker {
 	 */
 	public NewCoverageCheckReport check(List<FileCoverageReport> coverage, List<Diff> diff, int threshold, int fileThreshold) {
 		Map<String, List<Line>> diffMap = diff.stream()
-				.filter(d -> !d.getFileName().startsWith("src/test/java/"))
-				.filter(d -> d.getFileName().endsWith(".java"))
+				.filter(d -> !d.getFileName().startsWith("src/test"))
 				.filter(d -> !d.getDiffSectionList().isEmpty())
 				.peek(d -> logger.debug("diff file {}", d.getFileName()))
-				.peek(d -> d.setFileName(d.getFileName().replaceFirst("src/main/java/", "")))
 				.collect(Collectors.toMap(Diff::getFileName
 						, d -> d.getDiffSectionList().stream()
 								.flatMap(s -> s.getLineList().stream())
 								.filter(l -> l.getType() == ModifyType.ADD)
 								.collect(Collectors.toList())
-						, (u1, u2) -> {
-							ArrayList<Line> diffs = new ArrayList<>();
-							diffs.addAll(u1);
-							diffs.addAll(u2);
+						, (u1, u2) -> Stream.concat(u1.stream(), u2.stream()).collect(Collectors.toList())));
 
-							return diffs;
-						}));
-
+		// TODO redesign for multi module
 		Map<String, List<LineCoverageReport>> coverageMap = coverage.stream()
 				.peek(r -> logger.debug("file coverage {}", r.getFileName()))
 				.collect(Collectors.toMap(FileCoverageReport::getFileName
 						, FileCoverageReport::getLineCoverageReportList
-						, (u1, u2) -> {
-							ArrayList<LineCoverageReport> diffs = new ArrayList<>();
-							diffs.addAll(u1);
-							diffs.addAll(u2);
-
-							return diffs;
-						}));
+						, (u1, u2) -> Stream.concat(u1.stream(), u2.stream()).collect(Collectors.toList())));
 
 
 		NewCoverageCheckReport result = combine(coverageMap, diffMap);
@@ -96,11 +88,23 @@ public class NewCoverageChecker {
 		int coveredLineCount = 0;
 
 		Set<String> files = new HashSet<>(coverageReport.keySet());
-		files.retainAll(newCodeLines.keySet());
 
 		List<NewCoveredFile> coveredFileList = new ArrayList<>();
 		for (String file : files) {
-			List<Line> diffList = newCodeLines.get(file);
+			// TODO 다른 모듈의 동일 패키지 동일 파일 이름일 경우에 대한 처리 필요
+
+			// 코드 커버리지의 끝 경로가 같은 경우에 대해 검색
+			List<Line> diffList = newCodeLines.entrySet().stream()
+				.filter(e -> e.getKey().endsWith(file))
+				.findFirst()
+				.map(Map.Entry::getValue)
+				.orElse(Collections.emptyList());
+
+			if (diffList.isEmpty()) {
+				logger.debug("file({}) is not changed", file);
+				continue;
+			}
+
 			List<LineCoverageReport> lineCoverageReports = coverageReport.get(file);
 
 			logger.debug("check file {}", file);

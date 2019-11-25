@@ -19,6 +19,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @ToString
 @Builder
@@ -27,7 +29,7 @@ public class Parameter {
 	private int fileThreshold;
 	private String githubToken;
 	private String diffPath;
-	private String coveragePath;
+	private List<String> coveragePath;
 	private String githubUrl;
 	private String repo;
 	private String diffType;
