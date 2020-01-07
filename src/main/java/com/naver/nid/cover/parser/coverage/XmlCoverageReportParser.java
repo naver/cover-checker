@@ -33,7 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public final class XmlCoverageReportParser implements CoverageReportParser {
 
-	private final ReportXmlHandler handler;
+	private final CoverageReportXmlHandler handler;
 
 	@Override
 	public List<FileCoverageReport> parse(File reportFile) {

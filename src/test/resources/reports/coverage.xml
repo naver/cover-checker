@@ -8,9 +8,9 @@
 		<source>/home/minkyukim/Documents/work/coverchecker/target/generated-sources/annotations</source>
 	</sources>
 	<packages>
-		<package name="com.naver.nid.cover.parser.coverage.cobertura" line-rate="1.0" branch-rate="0.8846153846153846" complexity="3.6666666666666665">
+		<package name="com.naver.nid.cover.cobertura" line-rate="1.0" branch-rate="0.8846153846153846" complexity="3.6666666666666665">
 			<classes>
-				<class name="com.naver.nid.cover.parser.coverage.cobertura.CoberturaReportHandler" filename="com/naver/nid/cover/parser/coverage/cobertura/CoberturaReportHandler.java" line-rate="1.0" branch-rate="0.8846153846153846" complexity="3.6666666666666665">
+				<class name="com.naver.nid.cover.cobertura.CoberturaCoverageReportHandler" filename="com/naver/nid/cover/parser/coverage/cobertura/CoberturaReportHandler.java" line-rate="1.0" branch-rate="0.8846153846153846" complexity="3.6666666666666665">
 					<methods>
 						<method name="&lt;clinit&gt;" signature="()V" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>

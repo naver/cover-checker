@@ -3,8 +3,8 @@ package com.naver.nid.cover.util;
 import com.naver.nid.cover.checker.NewCoverageChecker;
 import com.naver.nid.cover.parser.coverage.CoverageReportParser;
 import com.naver.nid.cover.parser.coverage.XmlCoverageReportParser;
-import com.naver.nid.cover.parser.coverage.cobertura.CoberturaReportHandler;
-import com.naver.nid.cover.parser.coverage.jacoco.JacocoReportParser;
+import com.naver.nid.cover.cobertura.CoberturaCoverageReportHandler;
+import com.naver.nid.cover.jacoco.JacocoReportParser;
 import com.naver.nid.cover.parser.diff.DiffParser;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +24,7 @@ class ObjectFactoryTest {
         CoverageReportParser cobertura = new ObjectFactory(Parameter.builder().coverageType("cobertura").build()).getCoverageReportParser();
         Field handler = XmlCoverageReportParser.class.getDeclaredField("handler");
         handler.setAccessible(true);
-        assertEquals(CoberturaReportHandler.class, handler.get(cobertura).getClass());
+        assertEquals(CoberturaCoverageReportHandler.class, handler.get(cobertura).getClass());
     }
 
     @Test

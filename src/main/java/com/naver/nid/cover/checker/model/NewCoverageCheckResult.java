@@ -15,7 +15,7 @@
  */
 package com.naver.nid.cover.checker.model;
 
-import com.naver.nid.cover.github.model.CommitState;
+import com.naver.nid.cover.github.manager.model.CommitState;
 
 import static com.naver.nid.cover.checker.model.ResultIcon.*;
 
