@@ -98,7 +98,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>cover.CoverChecker</mainClass>
+                            <mainClass>com.naver.nid.cover.CoverChecker</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -119,7 +119,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>cover.CoverChecker</mainClass>
+                            <mainClass>com.naver.nid.cover.CoverChecker</mainClass>
                             <addDefaultImplementationEntries>
                                 true
                             </addDefaultImplementationEntries>
