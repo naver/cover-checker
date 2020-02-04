@@ -25,11 +25,4 @@
         </dependency>
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>eclipse</id>
-            <name>eclipse repository</name>
-            <url>https://repo.eclipse.org/content/repositories/egit-releases/</url>
-        </repository>
-    </repositories>
 </project>
