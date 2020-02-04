@@ -108,7 +108,7 @@ class CoverCheckerTest {
 				.coveragePath(Arrays.asList("test-module1", "test-module2"))
 				.coverageType("jacoco")
 				.githubToken("token")
-				.githubUrl("enterprise.com.naver.nid.cover.github.com")
+				.githubUrl("enterprise.github.com")
 				.prNumber(1)
 				.threshold(50)
 				.fileThreshold(30)

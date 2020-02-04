@@ -26,7 +26,7 @@ public class ParameterParser {
 	private static final Logger logger = LoggerFactory.getLogger(ParameterParser.class);
 
 	private static final String THRESHOLD_OPTION = "threshold";
-	private static final String GITHUB_TOKEN_OPTION = "com.naver.nid.cover.github-token";
+	private static final String GITHUB_TOKEN_OPTION = "github-token";
 	private static final String DIFF_OPTION = "diff";
 	private static final String COVERAGE_PATH_OPTION = "com/naver/nid/cover";
 	private static final String COVERAGE_TYPE_OPTION = "type";
@@ -95,32 +95,32 @@ public class ParameterParser {
 		commandOptions.addOption(Option.builder("dt")
 				.longOpt("diff-type")
 				.hasArg()
-				.desc("diff type (com.naver.nid.cover.github | file)")
+				.desc("diff type (github | file)")
 				.build());
 
 		commandOptions.addOption(Option.builder("g")
 				.longOpt(GITHUB_TOKEN_OPTION)
 				.required()
 				.hasArg()
-				.desc("com.naver.nid.cover.github oauth token")
+				.desc("github oauth token")
 				.build());
 
 		commandOptions.addOption(Option.builder("u")
-				.longOpt("com.naver.nid.cover.github-url")
+				.longOpt("github-url")
 				.hasArg()
-				.desc("The url when you working on com.naver.nid.cover.github enterprise url. default is api.com.naver.nid.cover.github.com")
+				.desc("The url when you working on github enterprise url. default is api.github.com")
 				.build());
 
 		commandOptions.addOption(Option.builder("p")
 				.longOpt("pr")
 				.hasArg()
-				.desc("com.naver.nid.cover.github pr number")
+				.desc("github pr number")
 				.build());
 
 		commandOptions.addOption(Option.builder("r").required()
 				.longOpt("repo")
 				.hasArg()
-				.desc("com.naver.nid.cover.github repo")
+				.desc("github repo")
 				.build());
 
 		commandOptions.addOption(Option.builder("c")
