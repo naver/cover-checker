@@ -51,17 +51,18 @@ public class NewCoverageChecker {
 	 */
 	public NewCoverageCheckReport check(List<FileCoverageReport> coverage, List<Diff> diff, int threshold, int fileThreshold) {
 		Map<String, List<Line>> diffMap = diff.stream()
+				.filter(Objects::nonNull)
+				.peek(d -> logger.debug("diff file {}", d.getFileName()))
 				.filter(d -> !d.getFileName().startsWith("src/test"))
 				.filter(d -> !d.getDiffSectionList().isEmpty())
-				.peek(d -> logger.debug("diff file {}", d.getFileName()))
 				.collect(Collectors.toMap(Diff::getFileName
 						, d -> d.getDiffSectionList().stream()
+								.filter(s -> Objects.nonNull(s.getLineList()))
 								.flatMap(s -> s.getLineList().stream())
 								.filter(l -> l.getType() == ModifyType.ADD)
 								.collect(Collectors.toList())
 						, (u1, u2) -> Stream.concat(u1.stream(), u2.stream()).collect(Collectors.toList())));
 
-		// TODO redesign for multi module
 		Map<String, List<LineCoverageReport>> coverageMap = coverage.stream()
 				.peek(r -> logger.debug("file coverage {}", r.getFileName()))
 				.collect(Collectors.toMap(FileCoverageReport::getFileName
