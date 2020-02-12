@@ -28,7 +28,7 @@ public class ParameterParser {
 	private static final String THRESHOLD_OPTION = "threshold";
 	private static final String GITHUB_TOKEN_OPTION = "github-token";
 	private static final String DIFF_OPTION = "diff";
-	private static final String COVERAGE_PATH_OPTION = "com/naver/nid/cover";
+	private static final String COVERAGE_PATH_OPTION = "cover";
 	private static final String COVERAGE_TYPE_OPTION = "type";
 
 	public Parameter getParam(String... commandArgs) {
@@ -75,7 +75,7 @@ public class ParameterParser {
 	}
 
 	private String getPrNumber(CommandLine cmd) {
-		String p = cmd.getOptionValue("p");
+		String p = cmd.getOptionValue("p", "-1");
 		if (p != null && p.length() > 0) {
 			return p;
 		}
@@ -100,7 +100,6 @@ public class ParameterParser {
 
 		commandOptions.addOption(Option.builder("g")
 				.longOpt(GITHUB_TOKEN_OPTION)
-				.required()
 				.hasArg()
 				.desc("github oauth token")
 				.build());
@@ -117,7 +116,7 @@ public class ParameterParser {
 				.desc("github pr number")
 				.build());
 
-		commandOptions.addOption(Option.builder("r").required()
+		commandOptions.addOption(Option.builder("r")
 				.longOpt("repo")
 				.hasArg()
 				.desc("github repo")
@@ -135,7 +134,8 @@ public class ParameterParser {
 				.desc("coverage report type (jacoco | cobertura) default is jacoco")
 				.build());
 
-		commandOptions.addOption(Option.builder("t").required()
+		commandOptions.addOption(Option.builder("t")
+				.required()
 				.longOpt(THRESHOLD_OPTION).type(Integer.class)
 				.hasArg()
 				.desc("coverage pass threshold")

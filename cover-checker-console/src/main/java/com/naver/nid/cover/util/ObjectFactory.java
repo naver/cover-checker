@@ -60,7 +60,11 @@ public class ObjectFactory {
     }
 
     public Reporter getReporter() {
-        return new ConsoleReporter().andThen(new GithubPullRequestReporter(getPrManager()))::accept;
+        ConsoleReporter consoleReporter = new ConsoleReporter();
+        if (param.getPrNumber() == -1) {
+            return consoleReporter;
+        }
+        return consoleReporter.andThen(new GithubPullRequestReporter(getPrManager()))::accept;
     }
 
     public GithubPullRequestManager getPrManager() {
