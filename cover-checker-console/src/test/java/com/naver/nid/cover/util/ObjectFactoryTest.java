@@ -1,13 +1,11 @@
 package com.naver.nid.cover.util;
 
 import com.naver.nid.cover.checker.NewCoverageChecker;
-import com.naver.nid.cover.github.parser.GithubDiffReader;
-import com.naver.nid.cover.parser.coverage.CoverageReportParser;
-import com.naver.nid.cover.parser.coverage.XmlCoverageReportParser;
 import com.naver.nid.cover.cobertura.CoberturaCoverageReportHandler;
 import com.naver.nid.cover.jacoco.JacocoReportParser;
-import com.naver.nid.cover.parser.diff.DiffParser;
-import org.junit.jupiter.api.Assertions;
+import com.naver.nid.cover.parser.coverage.CoverageReportParser;
+import com.naver.nid.cover.parser.coverage.XmlCoverageReportParser;
+import com.naver.nid.cover.parser.diff.FileDiffReader;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
@@ -18,7 +16,8 @@ class ObjectFactoryTest {
 
     @Test
     void getDiffParser() {
-        assertEquals(GithubDiffReader.class, new ObjectFactory(Parameter.builder().repo("test/test").build()).getDiffParser().getClass());
+        String diffPath = getClass().getClassLoader().getResource("test_diff.diff").getPath();
+        assertEquals(FileDiffReader.class, new ObjectFactory(Parameter.builder().diffPath(diffPath).diffType("file").build()).getDiffReader().getClass());
     }
 
     @Test

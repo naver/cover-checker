@@ -5,7 +5,7 @@
     <logger name="com.naver.nid.cover.parser.diff" level="INFO" />
     <logger name="com.naver.nid.cover.parser.coverage" level="INFO" />
     <logger name="com.naver.nid.cover.checker" level="INFO" />
-    <logger name="com.naver.nid.cover.com.naver.nid.cover.github" level="INFO" />
+    <logger name="com.naver.nid.cover.github" level="INFO" />
     <logger name="com.naver.nid.cover.reporter" level="INFO" />
 
     <root level="INFO">

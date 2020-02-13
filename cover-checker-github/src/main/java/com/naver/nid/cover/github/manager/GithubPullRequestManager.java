@@ -30,8 +30,8 @@ public class GithubPullRequestManager {
 
 	private final GitHubClient ghClient;
 	private final RepositoryId repoId;
-	private PullRequest pr;
-	private PullRequestService prService;
+	private final PullRequest pr;
+	private final PullRequestService prService;
 	private int prNumber;
 
 	public GithubPullRequestManager(String host, String oauthToken, String repoName, int prNumber) {
@@ -44,8 +44,13 @@ public class GithubPullRequestManager {
 
 		String[] repoNames = repoName.split("/");
 		repoId = new RepositoryId(repoNames[0], repoNames[1]);
-
 		prService = new PullRequestService(ghClient);
+
+		try {
+			pr = prService.getPullRequest(repoId, this.prNumber);
+		} catch (IOException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 	public User getUser() throws IOException {
@@ -57,11 +62,6 @@ public class GithubPullRequestManager {
 	}
 
 	public GithubStatusManager statusManager() {
-		try {
-			pr = prService.getPullRequest(repoId, this.prNumber);
-		} catch (IOException e) {
-			throw new IllegalStateException(e);
-		}
 		return new GithubStatusManager(new CommitService(ghClient), repoId, pr.getHead().getSha());
 	}
 
