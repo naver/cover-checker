@@ -39,7 +39,7 @@ public class ObjectFactory {
         this.param = param;
     }
 
-    public DiffParser getDiffParser() {
+    public DiffParser getDiffReader() {
         if ("file".equals(param.getDiffType())) {
             return new FileDiffReader(param.getDiffPath());
         } else {

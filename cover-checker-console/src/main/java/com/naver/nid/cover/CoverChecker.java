@@ -46,7 +46,7 @@ public final class CoverChecker {
 
 	public CoverChecker(ObjectFactory objectManager) {
 		this(objectManager.getCoverageReportParser(),
-				objectManager.getDiffParser(),
+				objectManager.getDiffReader(),
 				objectManager.getNewCoverageParser(),
 				objectManager.getReporter());
 	}

@@ -44,31 +44,36 @@ then maven would make jar `target/coverchecker-${version}-jar-with-dependencies.
 # Execute with parameter
 
 ```sh
-java -jar target/coverchecker-${version}-jar-with-dependencies.jar \
-    -c ${coverageReportPath} \
-    -g ${githubAccessToken} \
-    -r ${githubRepositoryPath} \
-    -t ${coverageThreshold} \
-    -u ${githubHost} \
-    -p ${pullrequestNo} \
+java -jar cover-checker-console/target/cover-checker-console-${version}-jar-with-dependencies.jar \
+    --cover ${coverageReportPath} \
+    --github-token ${githubAccessToken} \
+    --repo ${githubRepositoryPath} \
+    --threshold ${coverageThreshold} \
+    --github-url ${githubHost} \
+    --pr ${pullrequestNo} \
     -type (jacoco | cobertura)
 ```
 
 ### Parameter
 
 ```sh
-usage: coverchecker.jar -c <arg> [-d <arg>] [-dt <arg>] [-ft <arg>] -g <arg> [-p <arg>] -r <arg> -t <arg> [-type <arg>] -u <arg>
-
--c,--cover <arg>          coverage report path(recommend absolute path)
--d,--diff <arg>           diff file path(recommend absolute path)
+usage: coverchecker.jar -c <arg> [-d <arg>] [-dt <arg>] [-ft <arg>] [-g <arg>]
+       [-p <arg>] [-r <arg>] -t <arg> [-type <arg>] [-u <arg>]
+-c,--cover <arg>          coverage report paths(absolute recommend), coverage
+                          report path can take multiple paths for multi-module
+                          project
+-d,--diff <arg>           diff file path(absolute recommend)
 -dt,--diff-type <arg>     diff type (github | file)
--ft,--file-threshold <arg>file pass threshold default : 0
+-ft,--file-threshold <arg>coverage report type (jacoco | cobertura) default is
+                          jacoco
 -g,--github-token <arg>   github oauth token
--p,--pr <arg>             github pr number default : ${ghprbPullId} from github pull request builder
+-p,--pr <arg>             github pr number
 -r,--repo <arg>           github repo
 -t,--threshold <arg>      coverage pass threshold
--type <arg>               coverage report type (jacoco | cobertura) default : jacoco
--u,--github-url <arg>     github url
+-type <arg>               coverage report type (jacoco | cobertura) default is
+                          jacoco
+-u,--github-url <arg>     The url when you working on github enterprise url.
+                          default is api.github.com
 ```
 
 ## License

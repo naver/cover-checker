@@ -126,7 +126,7 @@ public class ParameterParser {
 				.longOpt(COVERAGE_PATH_OPTION)
 				.hasArg()
 				.required()
-				.desc("coverage report path(absolute recommend)")
+				.desc("coverage report paths(absolute recommend), coverage report path can take multiple paths for multi-module project")
 				.build());
 
 		commandOptions.addOption(Option.builder(COVERAGE_TYPE_OPTION)
