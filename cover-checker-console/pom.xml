@@ -5,7 +5,7 @@
     <parent>
         <artifactId>coverchecker</artifactId>
         <groupId>com.naver.nid</groupId>
-        <version>1.3.4</version>
+        <version>1.4.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,22 +15,22 @@
         <dependency>
             <groupId>com.naver.nid</groupId>
             <artifactId>cover-checker-core</artifactId>
-            <version>1.3.4</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.naver.nid</groupId>
             <artifactId>cover-checker-cobertura</artifactId>
-            <version>1.3.4</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.naver.nid</groupId>
             <artifactId>cover-checker-jacoco</artifactId>
-            <version>1.3.4</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.naver.nid</groupId>
             <artifactId>cover-checker-github</artifactId>
-            <version>1.3.4</version>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 </project>
