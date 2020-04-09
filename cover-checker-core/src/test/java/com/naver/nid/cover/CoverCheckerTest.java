@@ -3,7 +3,6 @@ package com.naver.nid.cover;
 import com.naver.nid.cover.checker.NewCoverageChecker;
 import com.naver.nid.cover.checker.model.NewCoverageCheckReport;
 import com.naver.nid.cover.checker.model.NewCoveredFile;
-import com.naver.nid.cover.github.manager.GithubPullRequestManager;
 import com.naver.nid.cover.parser.coverage.CoverageReportParser;
 import com.naver.nid.cover.parser.coverage.model.CoverageStatus;
 import com.naver.nid.cover.parser.coverage.model.FileCoverageReport;
@@ -30,14 +29,10 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class CoverCheckerTest {
-
-	@Mock
-	private GithubPullRequestManager manager;
 
 	private Reporter reporter = new ConsoleReporter();
 
