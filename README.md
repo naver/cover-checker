@@ -39,13 +39,14 @@ Use maven wrapper
 ./mvnw clean compile package
 ```
 
-then maven would make jar `target/coverchecker-${version}-jar-with-dependencies.jar`
+then maven would make jar `cover-checker-console/target/coverchecker-${version}-jar-with-dependencies.jar`
 
 # Execute with parameter
 
 ```sh
 java -jar cover-checker-console/target/cover-checker-console-${version}-jar-with-dependencies.jar \
     --cover ${coverageReportPath} \
+    [--cover ${otherCoverageReportPath}] \
     --github-token ${githubAccessToken} \
     --repo ${githubRepositoryPath} \
     --threshold ${coverageThreshold} \
