@@ -41,13 +41,14 @@
 $ ./mvnw clean compile package
 ```
 
-실제 사용할 파일은 `target/coverchecker-${version}-jar-with-dependencies.jar` 입니다.
+실제 사용할 파일은 `cover-checker-console/target/coverchecker-${version}-jar-with-dependencies.jar` 입니다.
 
 ## 실행
 
 ```sh
 java -jar cover-checker-console/target/cover-checker-console-${version}-jar-with-dependencies.jar \
     --cover ${coverageReportPath} \
+    [--cover ${otherCoverageReportPath}] \
     --github-token ${githubAccessToken} \
     --repo ${githubRepositoryPath} \
     --threshold ${coverageThreshold} \

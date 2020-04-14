@@ -20,9 +20,7 @@ import com.naver.nid.cover.checker.model.NewCoverageCheckReport;
 import com.naver.nid.cover.parser.diff.DiffParser;
 import com.naver.nid.cover.parser.diff.model.Diff;
 import com.naver.nid.cover.reporter.Reporter;
-import com.naver.nid.cover.util.ObjectFactory;
 import com.naver.nid.cover.util.Parameter;
-import com.naver.nid.cover.util.ParameterParser;
 import com.naver.nid.cover.parser.coverage.CoverageReportParser;
 import com.naver.nid.cover.parser.coverage.model.FileCoverageReport;
 import lombok.RequiredArgsConstructor;
@@ -43,13 +41,6 @@ public final class CoverChecker {
 	private final DiffParser diffParser;
 	private final NewCoverageChecker checker;
 	private final Reporter reporter;
-
-	public CoverChecker(ObjectFactory objectManager) {
-		this(objectManager.getCoverageReportParser(),
-				objectManager.getDiffReader(),
-				objectManager.getNewCoverageParser(),
-				objectManager.getReporter());
-	}
 
 	public boolean check(Parameter param) {
 		try {
@@ -85,13 +76,6 @@ public final class CoverChecker {
 
 	private <R> Supplier<CompletableFuture<R>> executeByBackground(Supplier<R> execute) {
 		return () -> CompletableFuture.supplyAsync(execute);
-	}
-
-	public static void main(String[] args) {
-		Parameter param = new ParameterParser().getParam(args);
-		if (param == null) return;
-
-		new CoverChecker(new ObjectFactory(param)).check(param);
 	}
 
 }
