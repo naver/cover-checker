@@ -26,10 +26,10 @@ Makes your code more durable!
 
 # Run with jenkins
 
-1. install jdk 8 on your ci
-2. build CoverChecker
-3.  Fix your project to generate test coverage report(CoverChecker only Jacoco or Cobertura)
-4. execute CoverChecker in you build job
+1. Install jdk 8 on your ci
+2. Build CoverChecker
+3. Fix your project to generate test coverage report(CoverChecker only Jacoco or Cobertura)
+4. Execute CoverChecker in you build job
 
 # How to build
 
@@ -40,6 +40,10 @@ Use maven wrapper
 ```
 
 then maven would make jar `cover-checker-console/target/coverchecker-${version}-jar-with-dependencies.jar`
+
+# Create access token
+
+Create a [access token](https://github.com/settings/tokens/new?scopes=repo&description=cover-checker)
 
 # Execute with parameter
 
