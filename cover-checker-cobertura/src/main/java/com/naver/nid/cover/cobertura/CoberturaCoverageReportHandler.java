@@ -117,8 +117,22 @@ public class CoberturaCoverageReportHandler extends CoverageReportXmlHandler {
 			lineReports = new ArrayList<>();
 
 			current.setFileName(fileName);
-			current.setType(fileName.split("\\.")[1]);
+			current.setType(getFileType(fileName));
 			current.setLineCoverageReportList(lineReports);
+		}
+	}
+
+	/**
+	 * extract file extension
+	 * @param fileName file name
+	 * @return
+	 */
+	private String getFileType(String fileName) {
+		String[] split = fileName.split("\\.");
+		if (split.length > 1) {
+			return split[split.length - 1];
+		} else {
+			return "";
 		}
 	}
 
