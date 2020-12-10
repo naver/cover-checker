@@ -22,6 +22,7 @@ import com.naver.nid.cover.parser.coverage.model.LineCoverageReport;
 import lombok.extern.slf4j.Slf4j;
 import org.xml.sax.Attributes;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,13 +77,13 @@ public class JacocoXmlCoverageReportHandler extends CoverageReportXmlHandler {
 	}
 
 	private CoverageStatus getLineStatus(Attributes attributes) {
-		int missInstruction = Integer.parseInt(attributes.getValue("mi"));
-		int missBranch = Integer.parseInt(attributes.getValue("mb"));
-		int coverBranch = Integer.parseInt(attributes.getValue("cb"));
+		BigInteger missInstruction = new BigInteger(attributes.getValue("mi"));
+		BigInteger missBranch = new BigInteger(attributes.getValue("mb"));
+		BigInteger coverBranch = new BigInteger(attributes.getValue("cb"));
 
-		if (missInstruction == 0 && missBranch == 0) {
+		if (missInstruction.compareTo(BigInteger.ZERO) == 0 && missBranch.compareTo(BigInteger.ZERO) == 0) {
 			return CoverageStatus.COVERED;
-		} else if (missBranch > 0 && coverBranch > 0) {
+		} else if (missBranch.compareTo(BigInteger.ZERO) > 0 && coverBranch.compareTo(BigInteger.ZERO) > 0) {
 			return CoverageStatus.CONDITION;
 		}
 
