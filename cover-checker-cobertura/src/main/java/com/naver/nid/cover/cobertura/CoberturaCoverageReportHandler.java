@@ -87,8 +87,8 @@ public class CoberturaCoverageReportHandler extends CoverageReportXmlHandler {
 	/**
 	 * 라인의 상태에 따라 현재 라인의 테스트 커버 유무를 정한다.
 	 *
-	 * @param attributes
-	 * @return
+	 * @param attributes xml attribute
+	 * @return 커버리지 상태
 	 */
 	private CoverageStatus getCoverageStatus(Attributes attributes) {
 		int hits = Integer.parseInt(attributes.getValue(ATTR_HITS));
@@ -102,7 +102,7 @@ public class CoberturaCoverageReportHandler extends CoverageReportXmlHandler {
 	/**
 	 * class 태그 초기화
 	 *
-	 * @param attributes
+	 * @param attributes xml attribute
 	 */
 	private void initClass(Attributes attributes) {
 		String fileName = attributes.getValue(ATTR_FILENAME);
@@ -117,22 +117,8 @@ public class CoberturaCoverageReportHandler extends CoverageReportXmlHandler {
 			lineReports = new ArrayList<>();
 
 			current.setFileName(fileName);
-			current.setType(getFileType(fileName));
+			current.setType(fileName.substring(fileName.lastIndexOf('.') + 1));
 			current.setLineCoverageReportList(lineReports);
-		}
-	}
-
-	/**
-	 * extract file extension
-	 * @param fileName file name
-	 * @return
-	 */
-	private String getFileType(String fileName) {
-		String[] split = fileName.split("\\.");
-		if (split.length > 1) {
-			return split[split.length - 1];
-		} else {
-			return "";
 		}
 	}
 
