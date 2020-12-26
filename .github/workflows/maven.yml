@@ -23,7 +23,7 @@ jobs:
         ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: java -jar ./cover-checker-console/target/cover-checker-console-1.4.0-jar-with-dependencies.jar -c ./cover-checker-cobertura/target/site/jacoco -c ./cover-checker-console/target/site/jacoco -c ./cover-checker-core/target/site/jacoco/ -c ./cover-checker-github/target/site/jacoco -c ./cover-checker-jacoco/target/site/jacoco -t 80 -r $GITHUB_REPOSITORY -g $ACCESS_TOKEN -p $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
   test-window:
-    runs-on: window-latest
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 1.8
