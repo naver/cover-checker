@@ -17,6 +17,11 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: mvn clean package
+    - name: comment coverage report
+      shell: bash
+      env:
+        ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: java -jar ./cover-checker-console/target/cover-checker-console-1.4.0-jar-with-dependencies.jar -c ./cover-checker-cobertura/target/site/jacoco -c ./cover-checker-console/target/site/jacoco -c ./cover-checker-core/target/site/jacoco/ -c ./cover-checker-github/target/site/jacoco -c ./cover-checker-jacoco/target/site/jacoco -t 80 -r $GITHUB_REPOSITORY -g $ACCESS_TOKEN -p $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
   test-window:
     runs-on: window-latest
     steps:
@@ -37,12 +42,4 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: mvn clean package
-  coverage:
-    needs: test-linux
-    runs-on: ubuntu-latest      
-    steps:
-      - name: comment coverage report
-        shell: bash
-        env:
-          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }') java -jar ./cover-checker-console/target/cover-checker-console-1.4.0-jar-with-dependencies.jar -c ./cover-checker-cobertura/target/site/jacoco -c ./cover-checker-console/target/site/jacoco -c ./cover-checker-core/target/site/jacoco/ -c ./cover-checker-github/target/site/jacoco -c ./cover-checker-jacoco/target/site/jacoco -t 80 -r $GITHUB_REPOSITORY -g $ACCESS_TOKEN -p $PR_NUMBER
+      
