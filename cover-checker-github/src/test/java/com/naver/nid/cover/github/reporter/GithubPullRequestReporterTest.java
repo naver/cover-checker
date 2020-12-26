@@ -65,7 +65,6 @@ class GithubPullRequestReporterTest {
 	private GithubPullRequestManager mockPrManager;
 	private GithubCommentManager mockCommentManager;
 	private GithubStatusManager mockStatusManager;
-	private User mockUser;
 
 	@BeforeEach
 	public void init() throws IOException {
@@ -75,15 +74,12 @@ class GithubPullRequestReporterTest {
 
 		when(mockPrManager.commentManager()).thenReturn(mockCommentManager);
 		when(mockPrManager.statusManager()).thenReturn(mockStatusManager);
-		mockUser = new User().setId(1);
-
-		when(mockPrManager.getUser()).thenReturn(mockUser);
 	}
 
 	@Test
 	public void reportTest() throws IOException {
 		GithubPullRequestReporter reporter = new GithubPullRequestReporter(mockPrManager);
-		when(mockCommentManager.deleteComment(reporter.oldReport(mockUser))).thenReturn(1);
+		when(mockCommentManager.deleteComment(reporter.oldReport())).thenReturn(1);
 		doNothing().when(mockCommentManager).addComment(COMMENT_WITH_FILE);
 
 		CommitStatusCreate commitStatus = CommitStatusCreate.builder()
@@ -110,7 +106,7 @@ class GithubPullRequestReporterTest {
 	@Test
 	public void reportConfuseTest() throws IOException {
 		GithubPullRequestReporter reporter = new GithubPullRequestReporter(mockPrManager);
-		when(mockCommentManager.deleteComment(reporter.oldReport(mockUser))).thenReturn(1);
+		when(mockCommentManager.deleteComment(reporter.oldReport())).thenReturn(1);
 		doNothing().when(mockCommentManager).addComment(COMMENT_WITH_CONFUSE);
 
 		CommitStatusCreate commitStatus = CommitStatusCreate.builder()
@@ -137,7 +133,7 @@ class GithubPullRequestReporterTest {
 	@Test
 	public void reportNoneSourceTest() throws IOException {
 		GithubPullRequestReporter reporter = new GithubPullRequestReporter(mockPrManager);
-		when(mockCommentManager.deleteComment(reporter.oldReport(mockUser))).thenReturn(1);
+		when(mockCommentManager.deleteComment(reporter.oldReport())).thenReturn(1);
 		doNothing().when(mockCommentManager).addComment(COMMENT_WITHOUT_FILE);
 
 		CommitStatusCreate commitStatus = CommitStatusCreate.builder()
@@ -161,7 +157,7 @@ class GithubPullRequestReporterTest {
 	@Test
 	public void reportError() throws IOException {
 		GithubPullRequestReporter reporter = new GithubPullRequestReporter(mockPrManager);
-		when(mockCommentManager.deleteComment(reporter.oldReport(mockUser))).thenReturn(1);
+		when(mockCommentManager.deleteComment(reporter.oldReport())).thenReturn(1);
 
 		doNothing().when(mockCommentManager).addComment(COMMENT_ERROR);
 		CommitStatusCreate commitStatus = CommitStatusCreate.builder()
