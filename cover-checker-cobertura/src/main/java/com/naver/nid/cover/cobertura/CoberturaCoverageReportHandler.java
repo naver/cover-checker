@@ -22,6 +22,7 @@ import com.naver.nid.cover.parser.coverage.model.LineCoverageReport;
 import lombok.extern.slf4j.Slf4j;
 import org.xml.sax.Attributes;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,10 +92,11 @@ public class CoberturaCoverageReportHandler extends CoverageReportXmlHandler {
 	 * @return
 	 */
 	private CoverageStatus getCoverageStatus(Attributes attributes) {
-		int hits = Integer.parseInt(attributes.getValue(ATTR_HITS));
+		BigInteger hits = new BigInteger(attributes.getValue(ATTR_HITS));
 		boolean branch = Boolean.parseBoolean(attributes.getValue(ATTR_BRANCH));
 
-		if (hits <= 0) return CoverageStatus.UNCOVERED;
+		if (hits.compareTo(BigInteger.ZERO) <= 0) return CoverageStatus.UNCOVERED;
+
 		if (!branch || attributes.getValue(ATTR_CONDITION_COVERAGE).startsWith("100%")) return CoverageStatus.COVERED;
 		return CoverageStatus.CONDITION;
 	}

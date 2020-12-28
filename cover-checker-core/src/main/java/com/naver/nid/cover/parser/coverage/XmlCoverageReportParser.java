@@ -45,6 +45,7 @@ public final class XmlCoverageReportParser implements CoverageReportParser {
 			saxParserFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
 			saxParserFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 			saxParserFactory.setValidating(false); // disable xml DTD check
+
 			log.debug("parse {}", reportFile.getName());
 			SAXParser saxParser = saxParserFactory.newSAXParser();
 			saxParser.parse(reportFile, handler);
