@@ -89,7 +89,7 @@ public class JacocoHtmlReportParser implements CoverageReportParser {
 
 			String filePath = file.getCanonicalPath();
 			logger.debug("parse {}", filePath);
-			String[] split = filePath.split("/");
+			String[] split = filePath.split("[/\\\\]");
 			String sourcePath = split[split.length - 2].replace(".", "/") + "/" + split[split.length - 1].replace(".html", "");
 			fileReport.setFileName(sourcePath);
 			fileReport.setType(file.getName().split("\\.")[1]);

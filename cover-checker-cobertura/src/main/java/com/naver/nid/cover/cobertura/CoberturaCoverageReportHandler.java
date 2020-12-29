@@ -22,6 +22,7 @@ import com.naver.nid.cover.parser.coverage.model.LineCoverageReport;
 import lombok.extern.slf4j.Slf4j;
 import org.xml.sax.Attributes;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -87,14 +88,15 @@ public class CoberturaCoverageReportHandler extends CoverageReportXmlHandler {
 	/**
 	 * 라인의 상태에 따라 현재 라인의 테스트 커버 유무를 정한다.
 	 *
-	 * @param attributes
-	 * @return
+	 * @param attributes xml attribute
+	 * @return 커버리지 상태
 	 */
 	private CoverageStatus getCoverageStatus(Attributes attributes) {
-		int hits = Integer.parseInt(attributes.getValue(ATTR_HITS));
+		BigInteger hits = new BigInteger(attributes.getValue(ATTR_HITS));
 		boolean branch = Boolean.parseBoolean(attributes.getValue(ATTR_BRANCH));
 
-		if (hits <= 0) return CoverageStatus.UNCOVERED;
+		if (hits.compareTo(BigInteger.ZERO) <= 0) return CoverageStatus.UNCOVERED;
+
 		if (!branch || attributes.getValue(ATTR_CONDITION_COVERAGE).startsWith("100%")) return CoverageStatus.COVERED;
 		return CoverageStatus.CONDITION;
 	}
@@ -102,7 +104,7 @@ public class CoberturaCoverageReportHandler extends CoverageReportXmlHandler {
 	/**
 	 * class 태그 초기화
 	 *
-	 * @param attributes
+	 * @param attributes xml attribute
 	 */
 	private void initClass(Attributes attributes) {
 		String fileName = attributes.getValue(ATTR_FILENAME);
@@ -117,7 +119,7 @@ public class CoberturaCoverageReportHandler extends CoverageReportXmlHandler {
 			lineReports = new ArrayList<>();
 
 			current.setFileName(fileName);
-			current.setType(fileName.split("\\.")[1]);
+			current.setType(fileName.substring(fileName.lastIndexOf('.') + 1));
 			current.setLineCoverageReportList(lineReports);
 		}
 	}
