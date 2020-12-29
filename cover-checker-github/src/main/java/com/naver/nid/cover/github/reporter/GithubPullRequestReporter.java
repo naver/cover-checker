@@ -84,8 +84,7 @@ public class GithubPullRequestReporter implements Reporter {
         logger.debug("result comment {}", comment);
         logger.debug("result commit status {}", commitStatus);
         try {
-            User watcher = manager.getUser();
-            commentManager.deleteComment(oldReport(watcher));
+            commentManager.deleteComment(oldReport());
             commentManager.addComment(comment);
             logger.debug("add comment {}", comment);
 
@@ -137,8 +136,8 @@ public class GithubPullRequestReporter implements Reporter {
     }
 
 
-    Predicate<Comment> oldReport(User watcher) {
-        return c -> c.getUser().getId() == watcher.getId() && c.getBody().contains(REPORT_HEADER);
+    Predicate<Comment> oldReport() {
+        return c -> c.getBody().contains(REPORT_HEADER);
     }
 
 }
