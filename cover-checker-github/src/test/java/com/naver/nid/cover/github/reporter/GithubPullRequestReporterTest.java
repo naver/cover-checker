@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class GithubPullRequestReporterTest {
 
-	private static final String COMMENT_WITH_FILE = "#### [PR Coverage check]\n" +
+	private static final String COMMENT_WITH_FILE = ("#### [PR Coverage check]\n" +
 			"\n" +
 			":heart_eyes: **pass** : 2 / 3 (66.67%)\n" +
 			"\n" +
@@ -35,9 +35,9 @@ class GithubPullRequestReporterTest {
 			"|   |path|covered line|new line|coverage|\n" +
 			"|----|----|----|----|----|\n" +
 			"|:large_blue_circle:|test.java|50|100|50.00%|\n" +
-			"|:large_blue_circle:|test2.java|50|100|50.00%|\n\n\n";
+			"|:large_blue_circle:|test2.java|50|100|50.00%|\n\n\n").replace("\n", System.lineSeparator());
 
-	private static final String COMMENT_WITH_CONFUSE = "#### [PR Coverage check]\n" +
+	private static final String COMMENT_WITH_CONFUSE = ("#### [PR Coverage check]\n" +
 			"\n" +
 			":confused: **check** : 2 / 3 (66.67%)\n" +
 			"\n" +
@@ -48,19 +48,19 @@ class GithubPullRequestReporterTest {
 			"|   |path|covered line|new line|coverage|\n" +
 			"|----|----|----|----|----|\n" +
 			"|:large_blue_circle:|test.java|50|100|50.00%|\n" +
-			"|:red_circle:|test2.java|30|100|30.00%|\n\n\n";
+			"|:red_circle:|test2.java|30|100|30.00%|\n\n\n").replace("\n", System.lineSeparator());
 
-	private static final String COMMENT_WITHOUT_FILE = "#### [PR Coverage check]\n" +
+	private static final String COMMENT_WITHOUT_FILE = ("#### [PR Coverage check]\n" +
 			"\n\n" +
-			":heart_eyes: **pass** : 0 / 0 (0%)\n\n\n";
+			":heart_eyes: **pass** : 0 / 0 (0%)\n\n\n").replace("\n", System.lineSeparator());
 
-	private static final String COMMENT_ERROR = "#### [PR Coverage check]\n" +
+	private static final String COMMENT_ERROR = ("#### [PR Coverage check]\n" +
 			"\n" +
 			"coverage check fail. please retry. :fearful:\n" +
 			"\n" +
 			"[Please let me know](https://github.com/naver/cover-checker/issues/new) when error again.\n" +
 			"\n" +
-			"test error";
+			"test error").replace("\n", System.lineSeparator());
 
 	private GithubPullRequestManager mockPrManager;
 	private GithubCommentManager mockCommentManager;
