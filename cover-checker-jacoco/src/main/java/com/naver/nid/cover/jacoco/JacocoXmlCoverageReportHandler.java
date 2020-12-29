@@ -48,7 +48,7 @@ public class JacocoXmlCoverageReportHandler extends CoverageReportXmlHandler {
 				currentFile = new FileCoverageReport();
 				String name = attributes.getValue("name");
 				currentFile.setFileName(pkgPath + "/" + name);
-				currentFile.setType(name.substring(name.indexOf('.') + 1));
+				currentFile.setType(name.substring(name.lastIndexOf('.') + 1));
 				log.debug("found new file {}", currentFile.getFileName());
 				lineReports = new ArrayList<>();
 				break;
