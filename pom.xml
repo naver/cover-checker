@@ -6,7 +6,7 @@
 
     <groupId>com.naver.nid</groupId>
     <artifactId>coverchecker</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2</version>
 
     <modules>
         <module>cover-checker-github</module>
@@ -43,14 +43,14 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>RELEASE</version>
+            <version>5.7.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>RELEASE</version>
+            <version>5.7.0</version>
             <scope>test</scope>
         </dependency>
 
