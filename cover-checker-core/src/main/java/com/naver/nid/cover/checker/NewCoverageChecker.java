@@ -26,6 +26,7 @@ import com.naver.nid.cover.parser.coverage.model.LineCoverageReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -50,7 +51,7 @@ public class NewCoverageChecker {
 	 * @return 전체 커버리지, 파일 별 커버리지
 	 */
 	public NewCoverageCheckReport check(List<FileCoverageReport> coverage, List<Diff> diff, int threshold, int fileThreshold) {
-		Map<String, List<Line>> diffMap = diff.stream()
+		Map<Path, List<Line>> diffMap = diff.stream()
 				.filter(Objects::nonNull)
 				.peek(d -> logger.debug("diff file {}", d.getFileName()))
 				.filter(d -> !d.getFileName().startsWith("src/test"))
@@ -63,7 +64,7 @@ public class NewCoverageChecker {
 								.collect(Collectors.toList())
 						, (u1, u2) -> Stream.concat(u1.stream(), u2.stream()).collect(Collectors.toList())));
 
-		Map<String, List<LineCoverageReport>> coverageMap = coverage.stream()
+		Map<Path, List<LineCoverageReport>> coverageMap = coverage.stream()
 				.peek(r -> logger.debug("file coverage {}", r.getFileName()))
 				.collect(Collectors.toMap(FileCoverageReport::getFileName
 						, FileCoverageReport::getLineCoverageReportList
@@ -84,14 +85,14 @@ public class NewCoverageChecker {
 	 * @param newCodeLines   add line of code for each files
 	 * @return new line of code coverage result
 	 */
-	private NewCoverageCheckReport combine(Map<String, List<LineCoverageReport>> coverageReport, Map<String, List<Line>> newCodeLines) {
+	private NewCoverageCheckReport combine(Map<Path, List<LineCoverageReport>> coverageReport, Map<Path, List<Line>> newCodeLines) {
 		int totalAddLineCount = 0;
 		int coveredLineCount = 0;
 
-		Set<String> files = new HashSet<>(coverageReport.keySet());
+		Set<Path> files = new HashSet<>(coverageReport.keySet());
 
 		List<NewCoveredFile> coveredFileList = new ArrayList<>();
-		for (String file : files) {
+		for (Path file : files) {
 			// TODO 다른 모듈의 동일 패키지 동일 파일 이름일 경우에 대한 처리 필요
 
 			// 코드 커버리지의 끝 경로가 같은 경우에 대해 검색

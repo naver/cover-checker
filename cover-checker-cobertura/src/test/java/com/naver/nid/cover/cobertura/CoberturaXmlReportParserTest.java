@@ -20,7 +20,7 @@ class CoberturaXmlReportParserTest {
 		List<FileCoverageReport> parsed = parser.parse(getClass().getClassLoader().getResource("reports/coverage.xml"));
 		assertEquals(1, parsed.size());
 		assertSame(CoverageStatus.COVERED, parsed.stream()
-				.filter(r -> r.getFileName().contains("CoberturaReportHandler"))
+				.filter(r -> r.getFileName().endsWith("CoberturaReportHandler.java"))
 				.findFirst().flatMap(r -> r.getLineCoverageReportList().stream()
 						.filter(lr -> lr.getLineNum() == 68).findFirst()).orElseThrow(AssertionError::new).getStatus());
 

@@ -7,7 +7,6 @@ import com.naver.nid.cover.github.manager.GithubCommentManager;
 import com.naver.nid.cover.github.manager.GithubPullRequestManager;
 import com.naver.nid.cover.github.manager.GithubStatusManager;
 import com.naver.nid.cover.github.manager.model.CommitStatusCreate;
-import org.eclipse.egit.github.core.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import static org.mockito.Mockito.*;
@@ -92,8 +92,8 @@ class GithubPullRequestReporterTest {
 				.totalNewLine(3)
 				.coveredNewLine(2)
 				.threshold(50)
-				.coveredFilesInfo(Arrays.asList(NewCoveredFile.builder().name("test.java").addedLine(100).addedCoverLine(50).build(),
-						NewCoveredFile.builder().name("test2.java").addedLine(100).addedCoverLine(50).build()))
+				.coveredFilesInfo(Arrays.asList(NewCoveredFile.builder().name(Paths.get("test.java")).addedLine(100).addedCoverLine(50).build(),
+						NewCoveredFile.builder().name(Paths.get("test2.java")).addedLine(100).addedCoverLine(50).build()))
 				.build();
 
 		reporter.report(result);
@@ -119,8 +119,8 @@ class GithubPullRequestReporterTest {
 				.totalNewLine(3)
 				.coveredNewLine(2)
 				.threshold(50)
-				.coveredFilesInfo(Arrays.asList(NewCoveredFile.builder().name("test.java").addedLine(100).addedCoverLine(50).build(),
-						NewCoveredFile.builder().name("test2.java").addedLine(100).addedCoverLine(30).build()))
+				.coveredFilesInfo(Arrays.asList(NewCoveredFile.builder().name(Paths.get("test.java")).addedLine(100).addedCoverLine(50).build(),
+						NewCoveredFile.builder().name(Paths.get("test2.java")).addedLine(100).addedCoverLine(30).build()))
 				.build();
 		result.setFileThreshold(50);
 

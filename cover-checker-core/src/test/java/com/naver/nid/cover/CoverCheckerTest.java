@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -54,8 +55,8 @@ class CoverCheckerTest {
 				, Line.builder().lineNumber(2).type(ModifyType.ADD).build());
 
 		List<DiffSection> diffSectionList = Collections.singletonList(DiffSection.builder().lineList(lines).build());
-		Stream<Diff> diffStream = Stream.of(Diff.builder().fileName("test.java").diffSectionList(diffSectionList).build(),
-			Diff.builder().fileName("test2.java").diffSectionList(diffSectionList).build());
+		Stream<Diff> diffStream = Stream.of(Diff.builder().fileName(Paths.get("test.java")).diffSectionList(diffSectionList).build(),
+			Diff.builder().fileName(Paths.get("test2.java")).diffSectionList(diffSectionList).build());
 
 
 		LineCoverageReport lineCoverageReport = new LineCoverageReport();
@@ -68,11 +69,11 @@ class CoverCheckerTest {
 
 		FileCoverageReport fileCoverageReport = new FileCoverageReport();
 		fileCoverageReport.setType("java");
-		fileCoverageReport.setFileName("test.java");
+		fileCoverageReport.setFileName(Paths.get("test.java"));
 		fileCoverageReport.setLineCoverageReportList(Arrays.asList(lineCoverageReport, lineCoverageReport2));
 		FileCoverageReport fileCoverageReport2 = new FileCoverageReport();
 		fileCoverageReport.setType("java");
-		fileCoverageReport.setFileName("test2.java");
+		fileCoverageReport.setFileName(Paths.get("test2.java"));
 		fileCoverageReport.setLineCoverageReportList(Arrays.asList(lineCoverageReport, lineCoverageReport2));
 		List<FileCoverageReport> coverageModule1 = Collections.singletonList(fileCoverageReport);
 		List<FileCoverageReport> coverageModule2 = Collections.singletonList(fileCoverageReport2);
@@ -83,7 +84,7 @@ class CoverCheckerTest {
 				.coveredNewLine(1)
 				.coveredFilesInfo(
 						Collections.singletonList(NewCoveredFile.builder()
-								.name("test.java")
+								.name(Paths.get("test.java"))
 								.addedLine(2)
 								.addedCoverLine(1)
 								.build()))

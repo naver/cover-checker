@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -45,7 +46,7 @@ class FileDiffParseTest {
 
 		assertEquals(1, collect.size());
 		Diff diff = collect.get(0);
-		assertEquals("src/main/java/com/naver/nid/push/token/service/TokenService.java", diff.getFileName());
+		assertEquals(Paths.get("src/main/java/com/naver/nid/push/token/service/TokenService.java"), diff.getFileName());
 		assertEquals(1, diff.getDiffSectionList().size());
 
 		DiffSection diffSection = diff.getDiffSectionList().get(0);
@@ -65,7 +66,7 @@ class FileDiffParseTest {
 
 		int testLineNum = parsedList.stream()
 //				.peek(diff -> logger.debug("diff file name {}", diff.getFileName()))
-				.filter(d -> d.getFileName().contains("TestService.java"))
+				.filter(d -> d.getFileName().endsWith("TestService.java"))
 				.flatMap(d -> d.getDiffSectionList().stream())
 //				.peek(diffSection -> logger.debug("find diff {}", diffSection))
 				.flatMap(diffSection -> diffSection.getLineList().stream())
