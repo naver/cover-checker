@@ -17,6 +17,7 @@ package com.naver.nid.cover.parser.diff;
 
 import com.naver.nid.cover.parser.diff.exception.ParseException;
 import com.naver.nid.cover.parser.diff.model.*;
+import com.naver.nid.cover.util.PathUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Path;
@@ -104,7 +105,7 @@ public class DiffMapper implements Function<RawDiff, Diff> {
 		if (path.startsWith("b/")) {
 			path = path.replaceFirst("b/", "");
 		}
-		return Paths.get(path);
+		return Paths.get(PathUtils.generalizeSeparator(path));
 	}
 
 	private Optional<List<DiffSection>> getDiffSectionListFromRawDiff(RawDiff rawDiff) {

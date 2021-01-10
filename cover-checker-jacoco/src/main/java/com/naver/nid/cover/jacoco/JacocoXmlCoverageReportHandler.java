@@ -19,6 +19,7 @@ import com.naver.nid.cover.parser.coverage.CoverageReportXmlHandler;
 import com.naver.nid.cover.parser.coverage.model.CoverageStatus;
 import com.naver.nid.cover.parser.coverage.model.FileCoverageReport;
 import com.naver.nid.cover.parser.coverage.model.LineCoverageReport;
+import com.naver.nid.cover.util.PathUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.xml.sax.Attributes;
 
@@ -44,7 +45,7 @@ public class JacocoXmlCoverageReportHandler extends CoverageReportXmlHandler {
 		if (localName.equals("")) localName = qName;
 		switch (localName) {
 			case "package":
-				pkgPath = attributes.getValue("name");
+				pkgPath = PathUtils.generalizeSeparator(attributes.getValue("name"));
 				log.debug("found new package {}", pkgPath);
 				break;
 			case "sourcefile":

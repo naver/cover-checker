@@ -19,6 +19,7 @@ import com.naver.nid.cover.parser.coverage.CoverageReportXmlHandler;
 import com.naver.nid.cover.parser.coverage.model.CoverageStatus;
 import com.naver.nid.cover.parser.coverage.model.FileCoverageReport;
 import com.naver.nid.cover.parser.coverage.model.LineCoverageReport;
+import com.naver.nid.cover.util.PathUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.xml.sax.Attributes;
 
@@ -110,7 +111,7 @@ public class CoberturaCoverageReportHandler extends CoverageReportXmlHandler {
 	 * @param attributes xml attribute
 	 */
 	private void initClass(Attributes attributes) {
-		Path filePath = Paths.get(attributes.getValue(ATTR_FILENAME));
+		Path filePath = Paths.get(PathUtils.generalizeSeparator(attributes.getValue(ATTR_FILENAME)));
 		if(log.isDebugEnabled()) {
 			log.debug("parse class {}({})", attributes.getValue("name"), filePath);
 		}

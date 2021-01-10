@@ -159,4 +159,46 @@ class NewCoverageCheckerTest {
         NewCoverageCheckReport check = checker.check(coverage, diffList, 60, 0);
         assertEquals(newCoverageCheckReport, check);
     }
+
+    @Test
+    public void coverCheckTestForWindowPath() {
+        NewCoverageChecker checker = new NewCoverageChecker();
+
+        List<Line> lines = Arrays.asList(
+                Line.builder().lineNumber(1).type(ModifyType.ADD).build()
+                , Line.builder().lineNumber(2).type(ModifyType.ADD).build());
+
+        List<DiffSection> diffSectionList = Collections.singletonList(DiffSection.builder().lineList(lines).build());
+        List<Diff> diffList = Collections.singletonList(Diff.builder().fileName(Paths.get("src\\main\\com\\naver\\nid\\test.kt")).diffSectionList(diffSectionList).build());
+
+
+        LineCoverageReport lineCoverageReport = new LineCoverageReport();
+        lineCoverageReport.setStatus(CoverageStatus.COVERED);
+        lineCoverageReport.setLineNum(1);
+
+        LineCoverageReport lineCoverageReport2 = new LineCoverageReport();
+        lineCoverageReport2.setStatus(CoverageStatus.UNCOVERED);
+        lineCoverageReport2.setLineNum(2);
+
+        FileCoverageReport fileCoverageReport = new FileCoverageReport();
+        fileCoverageReport.setType("kt");
+        fileCoverageReport.setFileName(Paths.get("src\\main\\com\\naver\\nid\\test.kt"));
+        fileCoverageReport.setLineCoverageReportList(Arrays.asList(lineCoverageReport, lineCoverageReport2));
+        List<FileCoverageReport> coverage = Collections.singletonList(fileCoverageReport);
+
+        NewCoverageCheckReport newCoverageCheckReport = NewCoverageCheckReport.builder()
+                .threshold(60)
+                .totalNewLine(2)
+                .coveredNewLine(1)
+                .coveredFilesInfo(
+                        Collections.singletonList(NewCoveredFile.builder()
+                                .name(Paths.get("src\\main\\com\\naver\\nid\\test.kt"))
+                                .addedLine(2)
+                                .addedCoverLine(1)
+                                .build()))
+                .build();
+
+        NewCoverageCheckReport check = checker.check(coverage, diffList, 60, 0);
+        assertEquals(newCoverageCheckReport, check);
+    }
 }
