@@ -90,8 +90,8 @@ public class JacocoHtmlReportParser implements CoverageReportParser {
 			String filePath = file.getCanonicalPath();
 			logger.debug("parse {}", filePath);
 			String[] split = filePath.split("[/\\\\]");
-			String sourcePath = split[split.length - 2].replace(".", "/") + "/" + split[split.length - 1].replace(".html", "");
-			fileReport.setFileName(sourcePath);
+			String sourcePath = split[split.length - 2].replace(".", File.separator) + File.separator + split[split.length - 1].replace(".html", "");
+			fileReport.setFileName(Paths.get(sourcePath));
 			fileReport.setType(file.getName().split("\\.")[1]);
 
 			List<LineCoverageReport> lineCoverageReports = doc.select(".linenums span").stream()

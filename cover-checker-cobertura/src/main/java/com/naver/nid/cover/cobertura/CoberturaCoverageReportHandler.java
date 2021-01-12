@@ -19,10 +19,13 @@ import com.naver.nid.cover.parser.coverage.CoverageReportXmlHandler;
 import com.naver.nid.cover.parser.coverage.model.CoverageStatus;
 import com.naver.nid.cover.parser.coverage.model.FileCoverageReport;
 import com.naver.nid.cover.parser.coverage.model.LineCoverageReport;
+import com.naver.nid.cover.util.PathUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.xml.sax.Attributes;
 
 import java.math.BigInteger;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +49,8 @@ public class CoberturaCoverageReportHandler extends CoverageReportXmlHandler {
 
 	private boolean isNowMethod; // 현재 메소드 내부인지
 
-	private Map<String, FileCoverageReport> reports = new HashMap<>();
+	private final Map<Path, FileCoverageReport> reports = new HashMap<>();
+
 	private List<LineCoverageReport> lineReports;
 	private FileCoverageReport current;
 
@@ -107,18 +111,18 @@ public class CoberturaCoverageReportHandler extends CoverageReportXmlHandler {
 	 * @param attributes xml attribute
 	 */
 	private void initClass(Attributes attributes) {
-		String fileName = attributes.getValue(ATTR_FILENAME);
+		Path filePath = Paths.get(PathUtils.generalizeSeparator(attributes.getValue(ATTR_FILENAME)));
 		if(log.isDebugEnabled()) {
-			log.debug("parse class {}({})", attributes.getValue("name"), fileName);
+			log.debug("parse class {}({})", attributes.getValue("name"), filePath);
 		}
-		if (reports.containsKey(fileName)) {
-			current = reports.get(fileName);
+		if (reports.containsKey(filePath)) {
+			current = reports.get(filePath);
 			lineReports = current.getLineCoverageReportList();
 		} else {
 			current = new FileCoverageReport();
 			lineReports = new ArrayList<>();
-
-			current.setFileName(fileName);
+			String fileName = filePath.getFileName().toString();
+			current.setFileName(filePath);
 			current.setType(fileName.substring(fileName.lastIndexOf('.') + 1));
 			current.setLineCoverageReportList(lineReports);
 		}

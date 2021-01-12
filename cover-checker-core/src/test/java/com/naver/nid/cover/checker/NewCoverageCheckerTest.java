@@ -11,6 +11,7 @@ import com.naver.nid.cover.parser.diff.model.Line;
 import com.naver.nid.cover.parser.diff.model.ModifyType;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +29,7 @@ class NewCoverageCheckerTest {
                 , Line.builder().lineNumber(2).type(ModifyType.ADD).build());
 
         List<DiffSection> diffSectionList = Collections.singletonList(DiffSection.builder().lineList(lines).build());
-        List<Diff> diffList = Collections.singletonList(Diff.builder().fileName("test.java").diffSectionList(diffSectionList).build());
+        List<Diff> diffList = Collections.singletonList(Diff.builder().fileName(Paths.get("test.java")).diffSectionList(diffSectionList).build());
 
 
         LineCoverageReport lineCoverageReport = new LineCoverageReport();
@@ -41,7 +42,7 @@ class NewCoverageCheckerTest {
 
         FileCoverageReport fileCoverageReport = new FileCoverageReport();
         fileCoverageReport.setType("java");
-        fileCoverageReport.setFileName("test.java");
+        fileCoverageReport.setFileName(Paths.get("test.java"));
         fileCoverageReport.setLineCoverageReportList(Arrays.asList(lineCoverageReport, lineCoverageReport2));
         List<FileCoverageReport> coverage = Collections.singletonList(fileCoverageReport);
 
@@ -51,7 +52,7 @@ class NewCoverageCheckerTest {
                 .coveredNewLine(1)
                 .coveredFilesInfo(
                         Collections.singletonList(NewCoveredFile.builder()
-                                .name("test.java")
+                                .name(Paths.get("test.java"))
                                 .addedLine(2)
                                 .addedCoverLine(1)
                                 .build()))
@@ -71,7 +72,7 @@ class NewCoverageCheckerTest {
                 , Line.builder().lineNumber(2).type(ModifyType.ADD).build());
 
         List<DiffSection> diffSectionList = Collections.singletonList(DiffSection.builder().lineList(lines).build());
-        List<Diff> diffList = Collections.singletonList(Diff.builder().fileName("test.kt").diffSectionList(diffSectionList).build());
+        List<Diff> diffList = Collections.singletonList(Diff.builder().fileName(Paths.get("test.kt")).diffSectionList(diffSectionList).build());
 
 
         LineCoverageReport lineCoverageReport = new LineCoverageReport();
@@ -84,7 +85,7 @@ class NewCoverageCheckerTest {
 
         FileCoverageReport fileCoverageReport = new FileCoverageReport();
         fileCoverageReport.setType("java");
-        fileCoverageReport.setFileName("test.kt");
+        fileCoverageReport.setFileName(Paths.get("test.kt"));
         fileCoverageReport.setLineCoverageReportList(Arrays.asList(lineCoverageReport, lineCoverageReport2));
         List<FileCoverageReport> coverage = Collections.singletonList(fileCoverageReport);
 
@@ -94,7 +95,7 @@ class NewCoverageCheckerTest {
                 .coveredNewLine(1)
                 .coveredFilesInfo(
                         Collections.singletonList(NewCoveredFile.builder()
-                                .name("test.kt")
+                                .name(Paths.get("test.kt"))
                                 .addedLine(2)
                                 .addedCoverLine(1)
                                 .build()))
@@ -114,8 +115,8 @@ class NewCoverageCheckerTest {
 
         List<DiffSection> diffSectionList = Collections.singletonList(DiffSection.builder().lineList(lines).build());
         List<Diff> diffList = Arrays.asList(
-                Diff.builder().fileName("Module1/src/main/kotlin/test.kt").diffSectionList(diffSectionList).build(),
-                Diff.builder().fileName("Module2/src/main/kotlin/test.kt").diffSectionList(diffSectionList).build());
+                Diff.builder().fileName(Paths.get("Module1/src/main/kotlin/test.kt")).diffSectionList(diffSectionList).build(),
+                Diff.builder().fileName(Paths.get("Module2/src/main/kotlin/test.kt")).diffSectionList(diffSectionList).build());
 
 
         LineCoverageReport lineCoverageReport = new LineCoverageReport();
@@ -128,12 +129,12 @@ class NewCoverageCheckerTest {
 
         FileCoverageReport fileCoverageReport = new FileCoverageReport();
         fileCoverageReport.setType("kt");
-        fileCoverageReport.setFileName("Module1/src/main/kotlin/test.kt");
+        fileCoverageReport.setFileName(Paths.get("Module1/src/main/kotlin/test.kt"));
         fileCoverageReport.setLineCoverageReportList(Arrays.asList(lineCoverageReport, lineCoverageReport2));
 
         FileCoverageReport fileCoverageReport2 = new FileCoverageReport();
         fileCoverageReport2.setType("kt");
-        fileCoverageReport2.setFileName("Module2/src/main/kotlin/test.kt");
+        fileCoverageReport2.setFileName(Paths.get("Module2/src/main/kotlin/test.kt"));
         fileCoverageReport2.setLineCoverageReportList(Arrays.asList(lineCoverageReport, lineCoverageReport2));
 
         List<FileCoverageReport> coverage = Arrays.asList(fileCoverageReport, fileCoverageReport2);
@@ -144,15 +145,57 @@ class NewCoverageCheckerTest {
                 .coveredNewLine(2)
                 .coveredFilesInfo(
                         Arrays.asList(NewCoveredFile.builder()
-                                        .name("Module2/src/main/kotlin/test.kt")
+                                        .name(Paths.get("Module2/src/main/kotlin/test.kt"))
                                         .addedLine(2)
                                         .addedCoverLine(1)
                                         .build(),
                                 NewCoveredFile.builder()
-                                        .name("Module1/src/main/kotlin/test.kt")
+                                        .name(Paths.get("Module1/src/main/kotlin/test.kt"))
                                         .addedLine(2)
                                         .addedCoverLine(1)
                                         .build()))
+                .build();
+
+        NewCoverageCheckReport check = checker.check(coverage, diffList, 60, 0);
+        assertEquals(newCoverageCheckReport, check);
+    }
+
+    @Test
+    public void coverCheckTestForWindowPath() {
+        NewCoverageChecker checker = new NewCoverageChecker();
+
+        List<Line> lines = Arrays.asList(
+                Line.builder().lineNumber(1).type(ModifyType.ADD).build()
+                , Line.builder().lineNumber(2).type(ModifyType.ADD).build());
+
+        List<DiffSection> diffSectionList = Collections.singletonList(DiffSection.builder().lineList(lines).build());
+        List<Diff> diffList = Collections.singletonList(Diff.builder().fileName(Paths.get("src\\main\\com\\naver\\nid\\test.kt")).diffSectionList(diffSectionList).build());
+
+
+        LineCoverageReport lineCoverageReport = new LineCoverageReport();
+        lineCoverageReport.setStatus(CoverageStatus.COVERED);
+        lineCoverageReport.setLineNum(1);
+
+        LineCoverageReport lineCoverageReport2 = new LineCoverageReport();
+        lineCoverageReport2.setStatus(CoverageStatus.UNCOVERED);
+        lineCoverageReport2.setLineNum(2);
+
+        FileCoverageReport fileCoverageReport = new FileCoverageReport();
+        fileCoverageReport.setType("kt");
+        fileCoverageReport.setFileName(Paths.get("src\\main\\com\\naver\\nid\\test.kt"));
+        fileCoverageReport.setLineCoverageReportList(Arrays.asList(lineCoverageReport, lineCoverageReport2));
+        List<FileCoverageReport> coverage = Collections.singletonList(fileCoverageReport);
+
+        NewCoverageCheckReport newCoverageCheckReport = NewCoverageCheckReport.builder()
+                .threshold(60)
+                .totalNewLine(2)
+                .coveredNewLine(1)
+                .coveredFilesInfo(
+                        Collections.singletonList(NewCoveredFile.builder()
+                                .name(Paths.get("src\\main\\com\\naver\\nid\\test.kt"))
+                                .addedLine(2)
+                                .addedCoverLine(1)
+                                .build()))
                 .build();
 
         NewCoverageCheckReport check = checker.check(coverage, diffList, 60, 0);

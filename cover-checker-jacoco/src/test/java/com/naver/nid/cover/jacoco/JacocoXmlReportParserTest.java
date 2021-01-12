@@ -22,7 +22,7 @@ public class JacocoXmlReportParserTest {
 		List<FileCoverageReport> parsed = parser.parse(getClass().getClassLoader().getResource("reports/jacoco.xml"));
 		assertEquals(38, parsed.size());
 		assertSame(CoverageStatus.COVERED, parsed.stream()
-				.filter(r -> r.getFileName().contains("Parameter"))
+				.filter(r -> r.getFileName().endsWith("Parameter.java"))
 				.findFirst().flatMap(r -> r.getLineCoverageReportList().stream()
 						.filter(lr -> lr.getLineNum() == 8).findFirst()).orElseThrow(AssertionError::new).getStatus());
 	}

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Slf4j
@@ -27,7 +28,7 @@ class JacocoHtmlReportParserTest {
 		log.debug("{}", parse);
 
 		FileCoverageReport fileCoverageReport = parse.get(0);
-		Assertions.assertEquals("com/naver/nid/cover/github/GithubCommentManager.java", fileCoverageReport.getFileName());
+		Assertions.assertEquals(Paths.get("com/naver/nid/cover/github/GithubCommentManager.java"), fileCoverageReport.getFileName());
 		Assertions.assertEquals("java", fileCoverageReport.getType());
 		Assertions.assertEquals(CoverageStatus.COVERED, fileCoverageReport.getLineCoverageReportList().stream().filter(l -> l.getLineNum() == 21).findFirst().orElseThrow(AssertionError::new).getStatus());
 	}
@@ -46,7 +47,7 @@ class JacocoHtmlReportParserTest {
 		log.debug("{}", reports);
 
 		FileCoverageReport fileCoverageReport = reports.get(0);
-		Assertions.assertEquals("com/naver/nid/cover/github/GithubCommentManager.java", fileCoverageReport.getFileName());
+		Assertions.assertEquals(Paths.get("com/naver/nid/cover/github/GithubCommentManager.java"), fileCoverageReport.getFileName());
 		Assertions.assertEquals("java", fileCoverageReport.getType());
 		Assertions.assertEquals(CoverageStatus.COVERED, fileCoverageReport.getLineCoverageReportList().stream().filter(l -> l.getLineNum() == 21).findFirst().orElseThrow(AssertionError::new).getStatus());
 	}

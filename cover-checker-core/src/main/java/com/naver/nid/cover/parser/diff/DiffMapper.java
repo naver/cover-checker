@@ -17,8 +17,11 @@ package com.naver.nid.cover.parser.diff;
 
 import com.naver.nid.cover.parser.diff.exception.ParseException;
 import com.naver.nid.cover.parser.diff.model.*;
+import com.naver.nid.cover.util.PathUtils;
 import lombok.extern.slf4j.Slf4j;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,7 +52,7 @@ public class DiffMapper implements Function<RawDiff, Diff> {
 		Diff diff = new Diff();
 
 		// set file name
-		Optional<String> fileName = Optional.ofNullable(rawDiff.getFileName()).map(this::removeNewFilePrefix);
+		Optional<Path> fileName = Optional.ofNullable(rawDiff.getFileName()).map(this::removeNewFilePrefix);
 		log.info("parse diff / {}", fileName);
 
 		if (!fileName.isPresent()) {
@@ -98,11 +101,11 @@ public class DiffMapper implements Function<RawDiff, Diff> {
 		return line.contains("\\ No newline at end of file");
 	}
 
-	private String removeNewFilePrefix(String path) {
+	private Path removeNewFilePrefix(String path) {
 		if (path.startsWith("b/")) {
 			path = path.replaceFirst("b/", "");
 		}
-		return path;
+		return Paths.get(PathUtils.generalizeSeparator(path));
 	}
 
 	private Optional<List<DiffSection>> getDiffSectionListFromRawDiff(RawDiff rawDiff) {

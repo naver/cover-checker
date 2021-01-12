@@ -17,6 +17,7 @@ package com.naver.nid.cover.parser.diff.model;
 
 import lombok.*;
 
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -29,6 +30,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Diff {
-	private String fileName;
+	private Path fileName;
 	private List<DiffSection> diffSectionList;
 }

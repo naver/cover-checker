@@ -18,6 +18,8 @@ package com.naver.nid.cover.checker.model;
 import lombok.Builder;
 import lombok.Data;
 
+import java.nio.file.Path;
+
 import static com.naver.nid.cover.checker.model.ResultIcon.CHECK_FILE_FAIL;
 import static com.naver.nid.cover.checker.model.ResultIcon.CHECK_FILE_PASS;
 
@@ -25,7 +27,7 @@ import static com.naver.nid.cover.checker.model.ResultIcon.CHECK_FILE_PASS;
 @Builder
 public class NewCoveredFile {
 
-	private String name;
+	private Path name;
 	private int addedLine;
 	private int addedCoverLine;
 	private int threshold;

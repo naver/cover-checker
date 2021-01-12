@@ -19,10 +19,13 @@ import com.naver.nid.cover.parser.coverage.CoverageReportXmlHandler;
 import com.naver.nid.cover.parser.coverage.model.CoverageStatus;
 import com.naver.nid.cover.parser.coverage.model.FileCoverageReport;
 import com.naver.nid.cover.parser.coverage.model.LineCoverageReport;
+import com.naver.nid.cover.util.PathUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.xml.sax.Attributes;
 
 import java.math.BigInteger;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +34,9 @@ import java.util.Map;
 @Slf4j
 public class JacocoXmlCoverageReportHandler extends CoverageReportXmlHandler {
 
+	private final Map<Path, FileCoverageReport> reportMap = new HashMap<>();
+
 	private String pkgPath;
-	private Map<String, FileCoverageReport> reportMap = new HashMap<>();
 	private FileCoverageReport currentFile;
 	private List<LineCoverageReport> lineReports;
 
@@ -41,13 +45,13 @@ public class JacocoXmlCoverageReportHandler extends CoverageReportXmlHandler {
 		if (localName.equals("")) localName = qName;
 		switch (localName) {
 			case "package":
-				pkgPath = attributes.getValue("name");
+				pkgPath = PathUtils.generalizeSeparator(attributes.getValue("name"));
 				log.debug("found new package {}", pkgPath);
 				break;
 			case "sourcefile":
 				currentFile = new FileCoverageReport();
 				String name = attributes.getValue("name");
-				currentFile.setFileName(pkgPath + "/" + name);
+				currentFile.setFileName(Paths.get(pkgPath, name));
 				currentFile.setType(name.substring(name.lastIndexOf('.') + 1));
 				log.debug("found new file {}", currentFile.getFileName());
 				lineReports = new ArrayList<>();

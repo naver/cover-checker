@@ -4,7 +4,7 @@ name: cover-checker test and get coverage
 on:
   pull_request:
     branches: [ master ]
-    types: [opened, synchronize, reopened, edited, ready_for_review, review_requested]
+    types: [opened, synchronize, reopened, edited, ready_for_review]
 
 jobs:
   test-linux:
@@ -21,7 +21,7 @@ jobs:
       shell: bash
       env:
         ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: java -jar ./cover-checker-console/target/cover-checker-console-1.4.1-jar-with-dependencies.jar -c ./cover-checker-cobertura/target/site/jacoco -c ./cover-checker-console/target/site/jacoco -c ./cover-checker-core/target/site/jacoco/ -c ./cover-checker-github/target/site/jacoco -c ./cover-checker-jacoco/target/site/jacoco -t 80 -r $GITHUB_REPOSITORY -g $ACCESS_TOKEN -p $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+      run: java -jar ./cover-checker-console/target/cover-checker-console-1.4.2-jar-with-dependencies.jar -c ./cover-checker-cobertura/target/site/jacoco -c ./cover-checker-console/target/site/jacoco -c ./cover-checker-core/target/site/jacoco/ -c ./cover-checker-github/target/site/jacoco -c ./cover-checker-jacoco/target/site/jacoco -t 80 -r $GITHUB_REPOSITORY -g $ACCESS_TOKEN -p $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
   test-macos:
     runs-on: macos-latest
     steps:
