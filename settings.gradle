@@ -1,0 +1,6 @@
+rootProject.name = 'cover-checker'
+include 'cover-checker-cobertura'
+include 'cover-checker-console'
+include 'cover-checker-core'
+include 'cover-checker-github'
+include 'cover-checker-jacoco'

@@ -1,0 +1,55 @@
+allprojects {
+    group "com.naver.nid"
+    version "1.5.0"
+
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        mavenLocal()
+    }
+
+    dependencies {
+        compile('ch.qos.logback:logback-classic:1.2.3')
+        compile('org.slf4j:slf4j-api:1.7.25')
+        compileOnly('org.projectlombok:lombok:1.18.2')
+        annotationProcessor('org.projectlombok:lombok:1.18.16')
+
+        testCompileOnly('org.projectlombok:lombok:1.18.2')
+        testAnnotationProcessor('org.projectlombok:lombok:1.18.16')
+        testCompile(platform('org.junit:junit-bom:5.7.0'))
+        testCompile('org.junit.jupiter:junit-jupiter')
+        testCompile("org.mockito:mockito-core:3.7.7")
+        testCompile("org.mockito:mockito-inline:3.7.7")
+        testCompile("org.mockito:mockito-junit-jupiter:3.7.7")
+    }
+
+    test {
+        finalizedBy jacocoTestReport
+
+        useJUnitPlatform()
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+    }
+
+    jacocoTestReport {
+        dependsOn test
+
+        reports {
+            xml.enabled(true)
+        }
+    }
+
+    jacoco {
+        toolVersion = "0.8.6"
+    }
+}
+
+subprojects {
+}
