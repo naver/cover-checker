@@ -15,13 +15,13 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Build with Maven
-      run: mvn clean package
+    - name: Build with Gradle
+      run: ./gradlew clean build jar
     - name: comment coverage report
       shell: bash
       env:
         ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: java -jar ./cover-checker-console/target/cover-checker-console-1.4.2-jar-with-dependencies.jar -c ./cover-checker-cobertura/target/site/jacoco -c ./cover-checker-console/target/site/jacoco -c ./cover-checker-core/target/site/jacoco/ -c ./cover-checker-github/target/site/jacoco -c ./cover-checker-jacoco/target/site/jacoco -t 80 -r $GITHUB_REPOSITORY -g $ACCESS_TOKEN -p $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+      run: java -jar ./cover-checker-console/build/libs/cover-checker-1.5.0-all.jar -c ./cover-checker-cobertura/build/reports/jacoco -c ./cover-checker-console/build/reports/jacoco -c ./cover-checker-core/build/reports/jacoco/ -c ./cover-checker-github/build/reports/jacoco -c ./cover-checker-jacoco/build/reports/jacoco -t 80 -r $GITHUB_REPOSITORY -g $ACCESS_TOKEN -p $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
   test-macos:
     runs-on: macos-latest
     steps:
@@ -30,8 +30,8 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Build with Maven
-      run: mvn clean package
+    - name: Build with Gradle
+      run: ./gradlew clean build jar
   test-window:
     runs-on: windows-latest
     steps:
@@ -40,5 +40,5 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Build with Maven
-      run: mvn clean package
+    - name: Build with Gradle
+      run: ./gradlew clean build jar
