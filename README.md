@@ -36,10 +36,10 @@ Makes your code more durable!
 Use maven wrapper
 
 ```sh
-./mvnw clean compile package
+./gradlew clean build jar
 ```
 
-then maven would make jar `cover-checker-console/target/coverchecker-${version}-jar-with-dependencies.jar`
+then maven would make jar `cover-checker-console/build/libs/cover-checker-${version}-all.jar`
 
 # Create access token
 
@@ -48,7 +48,7 @@ Create a [access token](https://github.com/settings/tokens/new?scopes=repo&descr
 # Execute with parameter
 
 ```sh
-java -jar cover-checker-console/target/cover-checker-console-${version}-jar-with-dependencies.jar \
+java -jar cover-checker-console/build/libs/cover-checker-${version}-all.jar \
     --cover ${coverageReportPath} \
     [--cover ${otherCoverageReportPath}] \
     --github-token ${githubAccessToken} \
