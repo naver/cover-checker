@@ -5,10 +5,3 @@ dependencies {
     compile 'org.thymeleaf:thymeleaf:3.0.10.RELEASE'
     compile 'com.google.code.gson:gson:2.8.5'
 }
-
-repositories {
-    maven {
-        name 'eclipse repository'
-        url 'https://repo.eclipse.org/content/repositories/egit-releases/'
-    }
-}

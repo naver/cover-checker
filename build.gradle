@@ -1,4 +1,4 @@
-allprojects {
+subprojects {
     group "com.naver.nid"
     version "1.5.0"
 
@@ -11,7 +11,11 @@ allprojects {
     repositories {
         mavenCentral()
         jcenter()
-        mavenLocal()
+
+        maven {
+            name 'eclipse repository'
+            url 'https://repo.eclipse.org/content/groups/releases/'
+        }
     }
 
     dependencies {
@@ -49,7 +53,4 @@ allprojects {
     jacoco {
         toolVersion = "0.8.6"
     }
-}
-
-subprojects {
 }
