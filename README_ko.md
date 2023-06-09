@@ -54,7 +54,7 @@ java -jar cover-checker-console/target/cover-checker-console-${version}-jar-with
     --threshold ${coverageThreshold} \
     --github-url ${githubHost} \
     --pr ${pullrequestNo} \
-    -type (jacoco | cobertura)
+    [-type (jacoco | cobertura)]
 ```
 
 ### 파라메터 설명

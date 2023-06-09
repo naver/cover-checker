@@ -7,11 +7,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class LauncherTest {
 
     @Test
-    public void testMain() {
-        Launcher.main(new String[]{""});
+    public void testRun() {
+        int exitCode = Launcher.run(new String[]{""});
+        assertEquals(1, exitCode);
         // execution fail
         // because there is no parameters for execute cover-checker
-        assertThrows(NullPointerException.class, () -> Launcher.main("-c path -t 80 -dt file".split(" ")));
+        assertThrows(NullPointerException.class, () -> Launcher.run("-c path -t 80 -dt file".split(" ")));
     }
 
 }

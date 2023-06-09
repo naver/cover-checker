@@ -17,12 +17,12 @@ package com.naver.nid.cover;
 
 import com.naver.nid.cover.checker.NewCoverageChecker;
 import com.naver.nid.cover.checker.model.NewCoverageCheckReport;
+import com.naver.nid.cover.parser.coverage.CoverageReportParser;
+import com.naver.nid.cover.parser.coverage.model.FileCoverageReport;
 import com.naver.nid.cover.parser.diff.DiffParser;
 import com.naver.nid.cover.parser.diff.model.Diff;
 import com.naver.nid.cover.reporter.Reporter;
 import com.naver.nid.cover.util.Parameter;
-import com.naver.nid.cover.parser.coverage.CoverageReportParser;
-import com.naver.nid.cover.parser.coverage.model.FileCoverageReport;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,51 +31,57 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Slf4j
 @RequiredArgsConstructor
 public final class CoverChecker {
 
-	private final CoverageReportParser coverageParser;
-	private final DiffParser diffParser;
-	private final NewCoverageChecker checker;
-	private final Reporter reporter;
+    private final List<CoverageReportParser> coverageParser;
+    private final DiffParser diffParser;
+    private final NewCoverageChecker checker;
+    private final Reporter reporter;
 
-	public boolean check(Parameter param) {
-		try {
-			log.info("Check new line of code coverage by {}", coverageParser.getClass().getSimpleName());
-			CompletableFuture<List<FileCoverageReport>> coverage = param.getCoveragePath().stream()
-				.map(s -> executeByBackground((Function<String, List<FileCoverageReport>>) coverageParser::parse).apply(s))
-				.reduce((f1, f2) -> f1.thenCombine(f2, (r1, r2) -> Stream.concat(r1.stream(), r2.stream()).collect(Collectors.toList())))
-				.orElseThrow(() -> new IllegalStateException("No Coverage Report"));
+    public boolean check(Parameter param) {
+        try {
+            log.info("Check new line of code coverage by {}", coverageParser.getClass().getSimpleName());
 
-			log.info("read diff by {}", diffParser.getClass().getSimpleName());
-			CompletableFuture<List<Diff>> diff = executeByBackground(diffParser::parse)
-					.get()
-					.thenApplyAsync(s -> s.collect(Collectors.toList()));
+            CompletableFuture<List<FileCoverageReport>> coverage = IntStream.range(0, param.getCoveragePath().size())
+                    .mapToObj(index -> {
+                        final String coveragePath = param.getCoveragePath().get(index);
+                        final CoverageReportParser parser = coverageParser.get(index);
+                        return executeByBackground((Function<String, List<FileCoverageReport>>) parser::parse).apply(coveragePath);
+                    })
+                    .reduce((f1, f2) -> f1.thenCombine(f2, (r1, r2) -> Stream.concat(r1.stream(), r2.stream()).collect(Collectors.toList())))
+                    .orElseThrow(() -> new IllegalStateException("No Coverage Report"));
 
-			NewCoverageCheckReport check = checker.check(coverage.join(), diff.join(), param.getThreshold(), param.getFileThreshold());
+            log.info("read diff by {}", diffParser.getClass().getSimpleName());
+            CompletableFuture<List<Diff>> diff = executeByBackground(diffParser::parse)
+                    .get()
+                    .thenApplyAsync(s -> s.collect(Collectors.toList()));
 
-			reporter.report(check);
-			log.info("check result {}", check.result());
-			return true;
-		} catch (Exception e) {
-			NewCoverageCheckReport failResult = NewCoverageCheckReport.builder()
-					.error(e)
-					.build();
+            NewCoverageCheckReport check = checker.check(coverage.join(), diff.join(), param.getThreshold(), param.getFileThreshold());
 
-			reporter.report(failResult);
-			return false;
-		}
-	}
+            reporter.report(check);
+            log.info("check result {}", check.result());
+            return true;
+        } catch (Exception e) {
+            NewCoverageCheckReport failResult = NewCoverageCheckReport.builder()
+                    .error(e)
+                    .build();
 
-	private <P, R> Function<P, CompletableFuture<R>> executeByBackground(Function<P, R> execute) {
-		return (P param) -> CompletableFuture.supplyAsync(() -> execute.apply(param));
-	}
+            reporter.report(failResult);
+            return false;
+        }
+    }
 
-	private <R> Supplier<CompletableFuture<R>> executeByBackground(Supplier<R> execute) {
-		return () -> CompletableFuture.supplyAsync(execute);
-	}
+    private <P, R> Function<P, CompletableFuture<R>> executeByBackground(Function<P, R> execute) {
+        return (P param) -> CompletableFuture.supplyAsync(() -> execute.apply(param));
+    }
+
+    private <R> Supplier<CompletableFuture<R>> executeByBackground(Supplier<R> execute) {
+        return () -> CompletableFuture.supplyAsync(execute);
+    }
 
 }

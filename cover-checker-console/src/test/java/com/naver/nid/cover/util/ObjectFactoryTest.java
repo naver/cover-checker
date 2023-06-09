@@ -9,6 +9,7 @@ import com.naver.nid.cover.parser.diff.FileDiffReader;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,7 +23,10 @@ class ObjectFactoryTest {
 
     @Test
     void getCoberturaCoverageReportParser() throws NoSuchFieldException, IllegalAccessException {
-        CoverageReportParser cobertura = new ObjectFactory(Parameter.builder().coverageType("cobertura").build()).getCoverageReportParser();
+        CoverageReportParser cobertura = new ObjectFactory(Parameter.builder()
+                .coveragePath(Arrays.asList("dummy/path.xml"))
+                .coverageType(Arrays.asList(CoverageType.COBERTURA))
+                .build()).getCoverageReportParser().get(0);
         Field handler = XmlCoverageReportParser.class.getDeclaredField("handler");
         handler.setAccessible(true);
         assertEquals(CoberturaCoverageReportHandler.class, handler.get(cobertura).getClass());
@@ -30,7 +34,10 @@ class ObjectFactoryTest {
 
     @Test
     void getJacocoCoverageReportParser() {
-        CoverageReportParser jacoco = new ObjectFactory(Parameter.builder().build()).getCoverageReportParser();
+        CoverageReportParser jacoco = new ObjectFactory(Parameter.builder()
+                .coveragePath(Arrays.asList("dummy/path.xml"))
+                .coverageType(Arrays.asList(CoverageType.JACOCO))
+                .build()).getCoverageReportParser().get(0);
         assertEquals(JacocoReportParser.class, jacoco.getClass());
     }
 

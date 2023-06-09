@@ -34,5 +34,5 @@ public class Parameter {
 	private String repo;
 	private String diffType;
 	private int prNumber;
-	private String coverageType;
+	private List<CoverageType> coverageType;
 }
