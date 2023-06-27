@@ -9,6 +9,10 @@ on:
 jobs:
   test-linux:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      checks: write
+      statuses: write
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 1.8
