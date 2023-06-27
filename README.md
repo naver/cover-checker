@@ -43,7 +43,7 @@ then maven would make jar `cover-checker-console/build/libs/cover-checker-${vers
 
 # Create access token
 
-Create a [access token](https://github.com/settings/tokens/new?scopes=repo&description=cover-checker)
+Create an [access token](https://github.com/settings/tokens/new?scopes=repo&description=cover-checker)
 
 # Execute with parameter
 
@@ -56,7 +56,18 @@ java -jar cover-checker-console/build/libs/cover-checker-${version}-all.jar \
     --threshold ${coverageThreshold} \
     --github-url ${githubHost} \
     --pr ${pullrequestNo} \
-    -type (jacoco | cobertura)
+    [-type (jacoco | cobertura)]
+```
+
+Note that both the `--cover` and `-type` parameters can be specified multiple times and are associated positionally.
+
+For example, if you have two coverage reports in different formats, you can specify them like this:
+
+```sh
+java -jar cover-checker-console/build/libs/cover-checker-${version}-all.jar \
+    -type jacoco --cover jacoco.xml \
+    -type cobertura --cover cobertura.xml \
+    ... # other parameters
 ```
 
 ### Parameter

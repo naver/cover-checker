@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ParameterParser {
 	private static final Logger logger = LoggerFactory.getLogger(ParameterParser.class);
@@ -31,21 +33,42 @@ public class ParameterParser {
 	private static final String COVERAGE_PATH_OPTION = "cover";
 	private static final String COVERAGE_TYPE_OPTION = "type";
 
-	public Parameter getParam(String... commandArgs) {
-		Options commandOptions = executeOption();
+	private Parameter fail(Options commandOptions, String message) {
+		final PrintWriter printWriter = new PrintWriter(System.out);
+		printWriter.append(message).append('\n').append('\n');
+		final HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp(printWriter, 80, "coverchecker.jar", "", commandOptions, 0, 0, "", true);
+		printWriter.flush();
+		return null;
+	}
 
-		CommandLineParser parser = new DefaultParser();
-		HelpFormatter formatter = new HelpFormatter();
+	public Parameter getParam(String... commandArgs) {
+		final Options commandOptions = executeOption();
+		final CommandLineParser parser = new DefaultParser();
 
 		CommandLine cmd;
 		try {
 			cmd = parser.parse(commandOptions, commandArgs);
 		} catch (ParseException e) {
-			PrintWriter printWriter = new PrintWriter(System.out);
-			printWriter.append(e.getMessage()).append('\n').append('\n');
-			formatter.printHelp(printWriter, 80, "coverchecker.jar", "", commandOptions, 0, 0, "", true);
-			printWriter.flush();
-			return null;
+			return fail(commandOptions, e.getMessage());
+		}
+
+		final List<String> coveragePaths = Arrays.asList(cmd.getOptionValues("c"));
+		List<CoverageType> coverageTypes;
+		try {
+			coverageTypes = parseCoverageTypes(cmd.getOptionValues(COVERAGE_TYPE_OPTION));
+		} catch (IllegalArgumentException e) {
+			return fail(commandOptions, e.getMessage());
+		}
+
+		if ((coverageTypes.size() == 1) && coveragePaths.size() > 1) {
+			// If there's a single "-type" arg, broadcast it for all coverage paths.
+			final CoverageType coverageType = coverageTypes.get(0);
+			coverageTypes = coveragePaths.stream().map(path -> coverageType).collect(Collectors.toList());
+		}
+
+		if (coveragePaths.size() != coverageTypes.size()) {
+			return fail(commandOptions, "Unmatched number of --cover and -type parameters");
 		}
 
 		Parameter param = Parameter.builder()
@@ -53,16 +76,26 @@ public class ParameterParser {
 				.fileThreshold(getFileThreshold(cmd))
 				.githubToken(cmd.getOptionValue("g"))
 				.diffPath(cmd.getOptionValue("d"))
-				.coveragePath(Arrays.asList(cmd.getOptionValues("c")))
+				.coveragePath(coveragePaths)
 				.githubUrl(cmd.getOptionValue("u", "api.github.com"))
 				.repo(cmd.getOptionValue("r"))
 				.diffType(cmd.getOptionValue("diff-type"))
 				.prNumber(Integer.parseInt(getPrNumber(cmd)))
-				.coverageType(cmd.getOptionValue(COVERAGE_TYPE_OPTION))
+				.coverageType(coverageTypes)
 				.build();
 
 		logger.debug("execute by {}", param);
 		return param;
+	}
+
+	private static List<CoverageType> parseCoverageTypes(String[] optionValues) {
+		if (optionValues == null) {
+			return Arrays.asList(CoverageType.JACOCO);
+		}
+
+		return Arrays.stream(optionValues)
+				.map(CoverageType::parse)
+				.collect(Collectors.toList());
 	}
 
 	private int getFileThreshold(CommandLine cmd) {

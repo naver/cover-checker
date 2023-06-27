@@ -28,6 +28,10 @@ import com.naver.nid.cover.reporter.Reporter;
 import com.naver.nid.cover.reporter.ConsoleReporter;
 import com.naver.nid.cover.github.reporter.GithubPullRequestReporter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 /**
  * {@link Parameter}에 따라 내부 객체를 생성하는 Factory 객체
  */
@@ -47,12 +51,19 @@ public class ObjectFactory {
         }
     }
 
-    public CoverageReportParser getCoverageReportParser() {
-        if ("cobertura".equals(param.getCoverageType())) {
-            return new XmlCoverageReportParser(new CoberturaCoverageReportHandler());
-        } else {
-            return new JacocoReportParser();
-        }
+    public List<CoverageReportParser> getCoverageReportParser() {
+        return IntStream.range(0, param.getCoveragePath().size())
+                .mapToObj(index -> {
+                    final CoverageType coverageType = param.getCoverageType().get(index);
+                    switch (coverageType) {
+                        case JACOCO:
+                            return new JacocoReportParser();
+                        case COBERTURA:
+                            return new XmlCoverageReportParser(new CoberturaCoverageReportHandler());
+                        default:
+                            throw new IllegalArgumentException("Unknown coverage type: " + coverageType);
+                    }
+                }).collect(Collectors.toList());
     }
 
     public NewCoverageChecker getNewCoverageParser() {
