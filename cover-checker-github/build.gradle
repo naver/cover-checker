@@ -1,7 +1,7 @@
 
 dependencies {
-    compile project(":cover-checker-core")
-    compile 'org.eclipse.mylyn.github:org.eclipse.egit.github.core:5.4.0.201905081430-m2'
-    compile 'org.thymeleaf:thymeleaf:3.0.10.RELEASE'
-    compile 'com.google.code.gson:gson:2.8.5'
+    implementation project(":cover-checker-core")
+    implementation 'org.eclipse.mylyn.github:org.eclipse.egit.github.core:5.4.0.201905081430-m2'
+    implementation 'org.thymeleaf:thymeleaf:3.0.10.RELEASE'
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
