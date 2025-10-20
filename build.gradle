@@ -10,7 +10,6 @@ subprojects {
 
     repositories {
         mavenCentral()
-        jcenter()
 
         maven {
             name 'eclipse repository'

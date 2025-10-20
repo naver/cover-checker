@@ -1,25 +1,28 @@
 
 buildscript {
     repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:6.1.0'
+        mavenCentral()
     }
 }
 
 apply plugin: 'application'
-apply plugin: 'com.github.johnrengelman.shadow'
 
 mainClassName = 'com.naver.nid.cover.Launcher'
 
-jar.finalizedBy(shadowJar)
-jar.manifest {
-    attributes 'Main-Class': 'com.naver.nid.cover.Launcher'
-    attributes 'Description': 'Check your test coverage for new appeded codes'
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'com.naver.nid.cover.Launcher'
+        attributes 'Description': 'Check your test coverage for new appeded codes'
+    }
+    baseName = 'cover-checker'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 
-shadowJar.archiveBaseName = 'cover-checker'
+build {
+    dependsOn fatJar
+}
 
 dependencies {
     compile project(':cover-checker-cobertura')
