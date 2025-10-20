@@ -25,10 +25,11 @@ build {
 }
 
 dependencies {
-    compile project(':cover-checker-cobertura')
-    compile project(':cover-checker-github')
-    compile project(':cover-checker-core')
-    compile project(':cover-checker-jacoco')
+    implementation project(':cover-checker-cobertura')
+    implementation project(':cover-checker-github')
+    implementation project(':cover-checker-core')
+    implementation project(':cover-checker-jacoco')
 
-    compile 'commons-cli:commons-cli:1.4'
+    implementation 'commons-cli:commons-cli:1.4'
+    testImplementation 'org.eclipse.mylyn.github:org.eclipse.egit.github.core:5.4.0.201905081430-m2'
 }

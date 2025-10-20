@@ -18,18 +18,18 @@ subprojects {
     }
 
     dependencies {
-        compile('ch.qos.logback:logback-classic:1.2.3')
-        compile('org.slf4j:slf4j-api:1.7.25')
+        implementation('ch.qos.logback:logback-classic:1.2.3')
+        implementation('org.slf4j:slf4j-api:1.7.25')
         compileOnly('org.projectlombok:lombok:1.18.2')
         annotationProcessor('org.projectlombok:lombok:1.18.16')
 
         testCompileOnly('org.projectlombok:lombok:1.18.2')
         testAnnotationProcessor('org.projectlombok:lombok:1.18.16')
-        testCompile(platform('org.junit:junit-bom:5.7.0'))
-        testCompile('org.junit.jupiter:junit-jupiter')
-        testCompile("org.mockito:mockito-core:3.7.7")
-        testCompile("org.mockito:mockito-inline:3.7.7")
-        testCompile("org.mockito:mockito-junit-jupiter:3.7.7")
+        testImplementation(platform('org.junit:junit-bom:5.7.0'))
+        testImplementation('org.junit.jupiter:junit-jupiter')
+        testImplementation("org.mockito:mockito-core:3.7.7")
+        testImplementation("org.mockito:mockito-inline:3.7.7")
+        testImplementation("org.mockito:mockito-junit-jupiter:3.7.7")
     }
 
     test {
@@ -45,7 +45,7 @@ subprojects {
         dependsOn test
 
         reports {
-            xml.enabled(true)
+            xml.required = true
         }
     }
 

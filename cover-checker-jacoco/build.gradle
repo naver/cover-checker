@@ -1,5 +1,5 @@
 
 dependencies {
-    compile project(':cover-checker-core')
-    compile 'org.jsoup:jsoup:1.11.3'
+    implementation project(':cover-checker-core')
+    implementation 'org.jsoup:jsoup:1.11.3'
 }
