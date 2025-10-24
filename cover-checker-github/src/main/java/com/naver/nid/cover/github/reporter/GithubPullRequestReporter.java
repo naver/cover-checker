@@ -24,7 +24,6 @@ import com.naver.nid.cover.github.manager.model.CommitStatusCreate;
 import com.naver.nid.cover.reporter.Reporter;
 import com.naver.nid.cover.reporter.exception.ReportException;
 import org.eclipse.egit.github.core.Comment;
-import org.eclipse.egit.github.core.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;
