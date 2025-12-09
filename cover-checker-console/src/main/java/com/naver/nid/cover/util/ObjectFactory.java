@@ -16,6 +16,7 @@
 package com.naver.nid.cover.util;
 
 import com.naver.nid.cover.github.parser.GithubDiffReader;
+import com.naver.nid.cover.lcov.LcovCoverageReportParser;
 import com.naver.nid.cover.parser.diff.DiffParser;
 import com.naver.nid.cover.checker.NewCoverageChecker;
 import com.naver.nid.cover.github.manager.GithubPullRequestManager;
@@ -60,6 +61,8 @@ public class ObjectFactory {
                             return new JacocoReportParser();
                         case COBERTURA:
                             return new XmlCoverageReportParser(new CoberturaCoverageReportHandler());
+                        case LCOV:
+                            return new LcovCoverageReportParser();
                         default:
                             throw new IllegalArgumentException("Unknown coverage type: " + coverageType);
                     }
