@@ -1,6 +1,7 @@
 package com.naver.nid.cover.lcov;
 
 import com.naver.nid.cover.parser.coverage.model.FileCoverageReport;
+import com.naver.nid.cover.util.PathUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +22,7 @@ class LcovCoverageReportParserTest {
         List<FileCoverageReport> parse = parser.parse(Objects.requireNonNull(classLoader.getResource("sample.info")));
 
         assertEquals(5, parse.size());
-        assertEquals("src/index.js", parse.get(4).getFileName().toString());
+        assertEquals(PathUtils.generalizeSeparator("src/index.js"), parse.get(4).getFileName().toString());
     }
 
     @Test
