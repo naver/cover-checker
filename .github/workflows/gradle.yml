@@ -36,6 +36,7 @@ jobs:
           cover-checker-core/build/reports/jacoco/test/jacocoTestReport.xml
           cover-checker-github/build/reports/jacoco/test/jacocoTestReport.xml
           cover-checker-jacoco/build/reports/jacoco/test/jacocoTestReport.xml
+          cover-checker-lcov/build/reports/jacoco/test/jacocoTestReport.xml
   coverage:
     runs-on: ubuntu-latest
     needs:
@@ -59,4 +60,4 @@ jobs:
       shell: bash
       env:
         ACCESS_TOKEN: ${{ secrets.ACTION_TOKEN }}
-      run: java -jar ./cover-checker-console/build/libs/cover-checker-1.5.0.jar -c ./cover-checker-cobertura/build/reports/jacoco -c ./cover-checker-console/build/reports/jacoco -c ./cover-checker-core/build/reports/jacoco/ -c ./cover-checker-github/build/reports/jacoco -c ./cover-checker-jacoco/build/reports/jacoco -t 80 -r $GITHUB_REPOSITORY -g $ACCESS_TOKEN -p $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+      run: java -jar ./cover-checker-console/build/libs/cover-checker-1.5.0.jar -c ./cover-checker-cobertura/build/reports/jacoco -c ./cover-checker-console/build/reports/jacoco -c ./cover-checker-core/build/reports/jacoco/ -c ./cover-checker-github/build/reports/jacoco -c ./cover-checker-jacoco/build/reports/jacoco -c ./cover-checker-lcov/build/reports/jacoco -t 80 -r $GITHUB_REPOSITORY -g $ACCESS_TOKEN -p $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
