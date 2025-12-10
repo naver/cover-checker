@@ -50,7 +50,7 @@ public class LcovCoverageReportParser implements CoverageReportParser {
                 } else if (ACCESS.equals(lineHeader)) {
                     int[] infos = Stream.of(lineValue.split(",", 2)).mapToInt(Integer::parseInt).toArray();
                     LineCoverageReport lReport = new LineCoverageReport();
-                    lReport.setStatus(CoverageStatus.COVERED);
+                    lReport.setStatus(infos[1] > 0 ? CoverageStatus.COVERED : CoverageStatus.UNCOVERED);
                     lReport.setLineNum(infos[0]);
                     lReport.setLineContent("");
                     report.getLineCoverageReportList().add(lReport);

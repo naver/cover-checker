@@ -1,5 +1,6 @@
 package com.naver.nid.cover.lcov;
 
+import com.naver.nid.cover.parser.coverage.model.CoverageStatus;
 import com.naver.nid.cover.parser.coverage.model.FileCoverageReport;
 import com.naver.nid.cover.util.PathUtils;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +24,9 @@ class LcovCoverageReportParserTest {
 
         assertEquals(5, parse.size());
         assertEquals(PathUtils.generalizeSeparator("src/index.js"), parse.get(4).getFileName().toString());
+        long uncoveredCnt = parse.get(3).getLineCoverageReportList().stream().filter(l -> l.getStatus() == CoverageStatus.UNCOVERED).count();
+
+        assertEquals(3, uncoveredCnt);
     }
 
     @Test
