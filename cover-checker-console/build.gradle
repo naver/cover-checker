@@ -1,11 +1,7 @@
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
+plugins {
+    id 'application'
+    id 'org.graalvm.buildtools.native' version '0.11.1'
 }
-
-apply plugin: 'application'
 
 mainClassName = 'com.naver.nid.cover.Launcher'
 
@@ -33,4 +29,15 @@ dependencies {
 
     implementation 'commons-cli:commons-cli:1.4'
     testImplementation 'org.eclipse.mylyn.github:org.eclipse.egit.github.core:5.4.0.201905081430-m2'
+}
+
+graalvmNative {
+    binaries.main {
+        // Optional native-image configuration
+        imageName.set('cover-checker')
+        mainClass.set('com.naver.nid.cover.Launcher')
+        debug = true
+    }
+    // Provide native-image arguments if needed
+    // args.set(['--no-fallback'])
 }
