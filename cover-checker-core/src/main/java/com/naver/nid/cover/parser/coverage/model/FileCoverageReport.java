@@ -33,6 +33,6 @@ public class FileCoverageReport {
 
 	@Override
 	public String toString() {
-		return String.format("%s %s%n%s", fileName, type, lineCoverageReportList.stream().map(LineCoverageReport::toString).collect(Collectors.joining("\n")));
+		return String.format("%s %s%n%s%n", fileName.toString(), type, lineCoverageReportList.stream().map(LineCoverageReport::toString).collect(Collectors.joining("\n")));
 	}
 }

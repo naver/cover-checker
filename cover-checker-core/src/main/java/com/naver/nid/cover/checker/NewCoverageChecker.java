@@ -97,7 +97,7 @@ public class NewCoverageChecker {
 
 			// 코드 커버리지의 끝 경로가 같은 경우에 대해 검색
 			List<Line> diffList = newCodeLines.entrySet().stream()
-				.filter(e -> e.getKey().endsWith(file))
+				.filter(e -> e.getKey().endsWith(file) || file.endsWith(e.getKey()))
 				.findFirst()
 				.map(Map.Entry::getValue)
 				.orElse(Collections.emptyList());

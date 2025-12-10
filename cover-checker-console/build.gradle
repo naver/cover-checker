@@ -29,6 +29,7 @@ dependencies {
     implementation project(':cover-checker-github')
     implementation project(':cover-checker-core')
     implementation project(':cover-checker-jacoco')
+    implementation project(':cover-checker-lcov')
 
     implementation 'commons-cli:commons-cli:1.4'
     testImplementation 'org.eclipse.mylyn.github:org.eclipse.egit.github.core:5.4.0.201905081430-m2'
