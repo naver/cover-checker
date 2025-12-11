@@ -3,7 +3,9 @@ plugins {
     id 'org.graalvm.buildtools.native' version '0.11.1'
 }
 
-mainClassName = 'com.naver.nid.cover.Launcher'
+application {
+    mainClass = 'com.naver.nid.cover.Launcher'
+}
 
 task fatJar(type: Jar) {
     manifest {
@@ -32,12 +34,37 @@ dependencies {
 }
 
 graalvmNative {
+    binaries.all {
+        resources.autodetect()
+    }
+
     binaries.main {
         // Optional native-image configuration
         imageName.set('cover-checker')
-        mainClass.set('com.naver.nid.cover.Launcher')
+        mainClass = 'com.naver.nid.cover.Launcher'
+        buildArgs.addAll(
+            ["-O0",
+            "--static",
+            "--gc=epsilon",
+            '-H:+ReportExceptionStackTraces',
+            '-H:IncludeResources=logback.xml',
+            '-H:IncludeResources=pattern.xml',
+            "-R:MaxHeapSize=100m",
+            // "--link-at-build-time",
+            '--initialize-at-build-time=org.slf4j,ch.qos.logback',
+            '--initialize-at-build-time=org.apache.commons.cli',
+            '--initialize-at-run-time=com.naver.nid.cover',
+
+            // HTTP 클라이언트 관련
+            '--enable-url-protocols=http,https',
+            '--enable-all-security-services'])
+
         debug = true
+        verbose = true
+        useFatJar = true
     }
-    // Provide native-image arguments if needed
-    // args.set(['--no-fallback'])
+
+    agent {
+        enabled = true
+    }
 }
