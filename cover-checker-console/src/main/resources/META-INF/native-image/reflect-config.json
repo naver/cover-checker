@@ -1,0 +1,6 @@
+[
+    {
+        "name":"org.eclipse.egit.github.core.PullRequest",
+        "unsafeAllocated": true
+    }
+]

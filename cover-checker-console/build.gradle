@@ -34,6 +34,8 @@ dependencies {
 }
 
 graalvmNative {
+    toolchainDetection = true
+
     binaries.all {
         resources.autodetect()
     }
@@ -53,7 +55,7 @@ graalvmNative {
             // "--link-at-build-time",
             '--initialize-at-build-time=org.slf4j,ch.qos.logback',
             '--initialize-at-build-time=org.apache.commons.cli',
-            '--initialize-at-run-time=com.naver.nid.cover',
+            '--initialize-at-build-time=com.naver.nid.cover',
 
             // HTTP 클라이언트 관련
             '--enable-url-protocols=http,https',
@@ -62,9 +64,26 @@ graalvmNative {
         debug = true
         verbose = true
         useFatJar = true
+        richOutput = true
     }
 
     agent {
         enabled = true
+        trackReflectionMetadata = true
+        enableExperimentalUnsafeAllocationTracing = true
+
+        modes {
+            standard {}
+        }
+
+        metadataCopy {
+            inputTaskNames.add("run")
+            outputDirectories.add("src/main/resources/META-INF/native-image")
+            mergeWithExisting = true
+        }
     }
+}
+
+tasks.named("nativeCompile") {
+    classpathJar = file('build/libs/cover-checker-1.5.0.jar')
 }
